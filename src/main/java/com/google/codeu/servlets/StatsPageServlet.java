@@ -24,7 +24,8 @@ public class StatsPageServlet extends HttpServlet{
   }
 
   /**
-   * Responds with site statistics in JSON.
+   * Responds with site statistics in JSON. 
+   * Example JSON object: {"messageCount": 5}
    */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
