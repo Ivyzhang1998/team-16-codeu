@@ -23,9 +23,6 @@ import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.SortDirection;
-//import java.util.ArrayList;
-//import java.util.List;
-//import java.util.UUID;
 import java.util.*;
 
 /** Provides access to the data stored in Datastore. */
