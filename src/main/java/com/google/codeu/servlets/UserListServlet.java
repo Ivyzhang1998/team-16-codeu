@@ -23,6 +23,9 @@ public class UserListServlet extends HttpServlet {
     datastore = new Datastore();
   }
 
+ /**
+   * Responds with a JSON representation of all users. 
+   */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException {

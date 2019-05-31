@@ -77,7 +77,9 @@ public class Datastore {
 
     return messages;
   }
-  
+  //fetch a list of users based on all of the messages stored in Dataset
+  //since set can not contain duplicates, we won't add a user multiple times
+  //from the messages posted by the same user
   public Set<String> getUsers(){
       Set<String> users = new HashSet<>();
       Query query = new Query("Message");
