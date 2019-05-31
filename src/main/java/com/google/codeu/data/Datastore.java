@@ -78,7 +78,7 @@ public class Datastore {
 
     return messages;
   }
-  
+
   /** Returns the total number of messages for all users.
    * 
    *  @return total number of messages posted by all users, limited to 1000.

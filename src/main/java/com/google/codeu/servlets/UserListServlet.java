@@ -23,7 +23,6 @@ public class UserListServlet extends HttpServlet {
     datastore = new Datastore();
   }
 
-
  /**
    * Responds with a JSON representation of all users. 
    * Example JSON: ["user@test.com", "user2@test.com", "user3@example.com"]
