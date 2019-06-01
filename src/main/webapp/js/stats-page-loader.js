@@ -1,18 +1,17 @@
-/**
- * Fetch stats and display them in the page.
- * @return {JSON} stats
- */
+/** Fetch stats and display them in the page. */
 function fetchStats(){
   const url = '/stats';
   fetch(url).then((response) => {
-  return response.json();
+  	return response.json();
   })
   .then((stats) => {
     const statsContainer = document.getElementById('stats-container');
     statsContainer.innerHTML = '';
 
     const messageCountElement = buildStatElement('Message count: ' + stats.messageCount);
+    const userCountElement = buildStatElement('User count: ' + stats.userCount);
     statsContainer.appendChild(messageCountElement);
+    statsContainer.appendChild(userCountElement);
   });
 }
 
