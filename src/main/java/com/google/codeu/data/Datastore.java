@@ -77,7 +77,7 @@ public class Datastore {
 
     return messages;
   }
-  /**<p> Fetch a list of users based on all of the messages stored in Dataset</p>
+  /**Fetch a list of users based on all of the messages stored in Dataset
    *
    * @return a list of users who have posted messages
    *
