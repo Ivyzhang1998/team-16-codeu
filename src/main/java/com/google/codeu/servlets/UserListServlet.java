@@ -25,6 +25,7 @@ public class UserListServlet extends HttpServlet {
 
  /**
    * Responds with a JSON representation of all users. 
+   * Example JSON: ["user@test.com", "user2@test.com", "user3@example.com"]
    */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -34,6 +35,7 @@ public class UserListServlet extends HttpServlet {
     Gson gson = new Gson();
     String json = gson.toJson(users);
     response.getOutputStream().println(json);
+    /**let other programs (Front-End) to read directly into variables */
   }
 }
 
