@@ -12,12 +12,12 @@
         fetch(url).then((response) => {
           return response.json();
         }).then((users) => {
-          const list = document.getElementById('list');
-          list.innerHTML = '';
+          const userlist = document.getElementById('userlist');
+          userlist.innerHTML = '';
 
           users.forEach((user) => {
-           const userListItem = buildUserListItem(user);
-           list.appendChild(userListItem);
+          const userListItem = buildUserListItem(user);
+          userlist.appendChild(userListItem);
           });
         });
       }
