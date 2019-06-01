@@ -55,7 +55,7 @@ public class Datastore {
 
     Query query =
         new Query("Message")
-            .setFilter(new Query.FilterPredicate("user", FilterOperator.EQUAL, user))
+            .setFilter(new Query.FilterPredicate("user", FilterOperator.EQUAL, user))//
             .addSort("timestamp", SortDirection.DESCENDING);
     PreparedQuery results = datastore.prepare(query);
 
@@ -77,12 +77,14 @@ public class Datastore {
 
     return messages;
   }
-  //fetch a list of users based on all of the messages stored in Dataset
-  //since set can not contain duplicates, we won't add a user multiple times
-  //from the messages posted by the same user
+  /**<p> Fetch a list of users based on all of the messages stored in Dataset</p>
+   *
+   * @return a list of users who have posted messages
+   *
+   */
   public Set<String> getUsers(){
       Set<String> users = new HashSet<>();
-      Query query = new Query("Message");
+      Query query = new Query("Message");//convert this previous
       PreparedQuery results = datastore.prepare(query);
       for(Entity entity : results.asIterable()) {
          users.add((String) entity.getProperty("user"));
