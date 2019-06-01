@@ -56,7 +56,7 @@ public class Datastore {
 
     Query query =
         new Query("Message")
-            .setFilter(new Query.FilterPredicate("user", FilterOperator.EQUAL, user))//
+            .setFilter(new Query.FilterPredicate("user", FilterOperator.EQUAL, user))
             .addSort("timestamp", SortDirection.DESCENDING);
     PreparedQuery results = datastore.prepare(query);
 
@@ -99,7 +99,7 @@ public class Datastore {
    
   public Set<String> getUsers(){
       Set<String> users = new HashSet<>();
-      Query query = new Query("Message");//convert this previous
+      Query query = new Query("Message");
       PreparedQuery results = datastore.prepare(query);
       for(Entity entity : results.asIterable()) {
          users.add((String) entity.getProperty("user"));
