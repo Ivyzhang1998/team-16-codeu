@@ -27,6 +27,9 @@ public class MessageFeedServlet extends HttpServlet{
  
  /**
   * Responds with a JSON representation of Message data for all users.
+  * 
+  * Example JSON Response:
+  * [{"id":"4da8334b-97e0-4f71-a851-c439c6dfe278","user":"test@example.com","text":"hello world","timestamp":1549746730095}]
   */
  @Override
  public void doGet(HttpServletRequest request, HttpServletResponse response)
