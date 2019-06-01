@@ -84,7 +84,7 @@ public class Datastore {
   /**
    * Iterates through query results and returns a list of messages
    * 
-   * @return a a list of messages.
+   * @return a list of messages.
    */
   private List<Message> processMessageQuery(PreparedQuery queryResults) {
 	  List<Message> messages = new ArrayList<>();
