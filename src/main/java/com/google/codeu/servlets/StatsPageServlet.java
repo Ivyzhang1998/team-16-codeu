@@ -25,7 +25,7 @@ public class StatsPageServlet extends HttpServlet{
 
   /**
    * Responds with site statistics in JSON. 
-   * Example JSON object: {"messageCount": 5}
+   * Example JSON object: {"messageCount": 5, "userCount": 3}
    */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -34,9 +34,11 @@ public class StatsPageServlet extends HttpServlet{
     response.setContentType("application/json");
 
     int messageCount = datastore.getTotalMessageCount();
+    int userCount = datastore.getUsers().size();
 
     JsonObject jsonObject = new JsonObject();
     jsonObject.addProperty("messageCount", messageCount);
+    jsonObject.addProperty("userCount", userCount);
     response.getOutputStream().println(jsonObject.toString());
   }
 }
