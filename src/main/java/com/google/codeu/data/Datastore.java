@@ -79,6 +79,7 @@ public class Datastore {
     return messages;
   }
 
+  
 
   /** Returns the total number of messages for all users.
    * 
@@ -89,6 +90,8 @@ public class Datastore {
     PreparedQuery results = datastore.prepare(query);
     return results.countEntities(FetchOptions.Builder.withLimit(1000));
 }
+
+
 
   /**Fetch a list of users based on all of the messages stored in Dataset
    *
@@ -106,5 +109,7 @@ public class Datastore {
       }
      return users;
   }
+
 }
+
 
