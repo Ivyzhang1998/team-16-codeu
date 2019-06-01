@@ -56,7 +56,7 @@ public class Datastore {
 
     Query query =
         new Query("Message")
-            .setFilter(new Query.FilterPredicate("user", FilterOperator.EQUAL, user))
+            .setFilter(new Query.FilterPredicate("user", FilterOperator.EQUAL, user))//
             .addSort("timestamp", SortDirection.DESCENDING);
     PreparedQuery results = datastore.prepare(query);
 
@@ -79,6 +79,7 @@ public class Datastore {
     return messages;
   }
 
+
   /** Returns the total number of messages for all users.
    * 
    *  @return total number of messages posted by all users, limited to 1000.
@@ -94,10 +95,11 @@ public class Datastore {
    * @return a list of users who have posted messages
    *
    */
+
    
   public Set<String> getUsers(){
       Set<String> users = new HashSet<>();
-      Query query = new Query("Message");
+      Query query = new Query("Message");//convert this previous
       PreparedQuery results = datastore.prepare(query);
       for(Entity entity : results.asIterable()) {
          users.add((String) entity.getProperty("user"));
