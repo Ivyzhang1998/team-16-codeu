@@ -79,16 +79,6 @@ public class Datastore {
     return messages;
   }
   
-  /** Returns the total number of messages for all users.
-   * 
-   *  @return total number of messages posted by all users, limited to 1000.
-   *  */
-  public int getTotalMessageCount(){
-    Query query = new Query("Message");
-    PreparedQuery results = datastore.prepare(query);
-    return results.countEntities(FetchOptions.Builder.withLimit(1000));
-
-}
   /**Fetch a list of users based on all of the messages stored in Dataset
    *
    * @return a list of users who have posted messages
