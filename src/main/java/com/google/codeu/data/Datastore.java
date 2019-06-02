@@ -88,7 +88,6 @@ public class Datastore {
     PreparedQuery results = datastore.prepare(query);
     return results.countEntities(FetchOptions.Builder.withLimit(1000));
 
-=======
 }
   /**Fetch a list of users based on all of the messages stored in Dataset
    *
@@ -105,4 +104,4 @@ public class Datastore {
      return users;
   }
 }
->>>>>>> master
+
