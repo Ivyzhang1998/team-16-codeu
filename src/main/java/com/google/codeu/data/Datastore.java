@@ -88,11 +88,13 @@ public class Datastore {
     PreparedQuery results = datastore.prepare(query);
     return results.countEntities(FetchOptions.Builder.withLimit(1000));
 }
+
   /**Fetch a list of users based on all of the messages stored in Dataset
    *
    * @return a list of users who have posted messages
    *
    */
+   
   public Set<String> getUsers(){
       Set<String> users = new HashSet<>();
       Query query = new Query("Message");
