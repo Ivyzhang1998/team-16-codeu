@@ -87,6 +87,7 @@ public class Datastore {
     Query query = new Query("Message");
     PreparedQuery results = datastore.prepare(query);
     return results.countEntities(FetchOptions.Builder.withLimit(1000));
+<<<<<<< HEAD
 }
   /**Fetch a list of users based on all of the messages stored in Dataset
    *
@@ -104,4 +105,22 @@ public class Datastore {
   }
 }
 
+=======
+}
+  /**Fetch a list of users based on all of the messages stored in Dataset
+   *
+   * @return a list of users who have posted messages
+   *
+   */
+  public Set<String> getUsers(){
+      Set<String> users = new HashSet<>();
+      Query query = new Query("Message");
+      PreparedQuery results = datastore.prepare(query);
+      for(Entity entity : results.asIterable()) {
+         users.add((String) entity.getProperty("user"));
+      }
+     return users;
+  }
+}
+>>>>>>> master
 
