@@ -81,6 +81,7 @@ public class Datastore {
 
   
 
+
   /** Returns the total number of messages for all users.
    * 
    *  @return total number of messages posted by all users, limited to 1000.
@@ -91,6 +92,7 @@ public class Datastore {
     return results.countEntities(FetchOptions.Builder.withLimit(1000));
 
 }
+
 
 
 
