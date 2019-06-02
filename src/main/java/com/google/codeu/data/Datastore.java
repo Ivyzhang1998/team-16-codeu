@@ -89,7 +89,9 @@ public class Datastore {
     Query query = new Query("Message");
     PreparedQuery results = datastore.prepare(query);
     return results.countEntities(FetchOptions.Builder.withLimit(1000));
+
 }
+
 
 
 
@@ -112,5 +114,6 @@ public class Datastore {
 
 
 }
+
 
 
