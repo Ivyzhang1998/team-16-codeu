@@ -3,7 +3,6 @@
 function fetchMessages() {
     const url = '/feed';
     fetch(url).then((response) => {
-        console.log(response);
         return response.json();
     }).then((messages) => {
         const messageContainer = document.getElementById('message-container');
