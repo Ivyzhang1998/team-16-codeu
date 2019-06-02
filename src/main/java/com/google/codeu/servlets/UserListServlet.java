@@ -28,6 +28,7 @@ public class UserListServlet extends HttpServlet {
    * Example JSON: ["user@test.com", "user2@test.com", "user3@example.com"]
    */
 
+
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException {

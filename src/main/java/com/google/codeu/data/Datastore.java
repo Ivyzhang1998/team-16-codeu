@@ -82,6 +82,7 @@ public class Datastore {
   
 
 
+
   /** Returns the total number of messages for all users.
    * 
    *  @return total number of messages posted by all users, limited to 1000.
@@ -97,13 +98,14 @@ public class Datastore {
 
 
 
+
   /**Fetch a list of users based on all of the messages stored in Dataset
    *
    * @return a list of users who have posted messages
    *
    */
 
-   
+
   public Set<String> getUsers(){
       Set<String> users = new HashSet<>();
       Query query = new Query("Message");
