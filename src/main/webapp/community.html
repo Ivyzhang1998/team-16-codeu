@@ -12,7 +12,7 @@
         fetch(url).then((response) => {
           return response.json();
         }).then((users) => {
-          const userlist = document.getElementById('list');
+          const userlist = document.getElementById('userlist');
           userlist.innerHTML = '';
           users.forEach((user) => {
            const userListItem = buildUserListItem(user);
@@ -45,7 +45,7 @@
       <h1>Community Page</h1>
       <p>Here is a list of every user who has posted a message:</p>
       <hr/>
-      <ul id="list">Loading...</ul>
+      <ul id="userlist">Loading...</ul>
     </div>
   </body>
 </html>
