@@ -12,9 +12,8 @@
         fetch(url).then((response) => {
           return response.json();
         }).then((users) => {
-          const userlist = document.getElementById('userlist');
+          const userlist = document.getElementById('list');
           userlist.innerHTML = '';
-
           users.forEach((user) => {
            const userListItem = buildUserListItem(user);
            userlist.appendChild(userListItem);
