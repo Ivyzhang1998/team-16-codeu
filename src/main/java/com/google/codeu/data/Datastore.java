@@ -24,9 +24,6 @@ import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.SortDirection;
-//import java.util.ArrayList;
-//import java.util.List;
-//import java.util.UUID;
 import java.util.*;
 
 /** Provides access to the data stored in Datastore. */
@@ -81,7 +78,11 @@ public class Datastore {
 
     return messages;
   }
+
   
+
+
+
   /** Returns the total number of messages for all users.
    * 
    *  @return total number of messages posted by all users, limited to 1000.
@@ -90,8 +91,21 @@ public class Datastore {
     Query query = new Query("Message");
     PreparedQuery results = datastore.prepare(query);
     return results.countEntities(FetchOptions.Builder.withLimit(1000));
+
 }
-  
+
+
+
+
+
+
+  /**Fetch a list of users based on all of the messages stored in Dataset
+   *
+   * @return a list of users who have posted messages
+   *
+   */
+
+
   public Set<String> getUsers(){
       Set<String> users = new HashSet<>();
       Query query = new Query("Message");
@@ -101,6 +115,9 @@ public class Datastore {
       }
      return users;
   }
+
+
 }
+
 
 
