@@ -52,37 +52,60 @@ public class Datastore {
    *     message. List is sorted by time descending.
    */
   public List<Message> getMessages(String user) {
-    List<Message> messages = new ArrayList<>();
-
     Query query =
         new Query("Message")
             .setFilter(new Query.FilterPredicate("user", FilterOperator.EQUAL, user))
             .addSort("timestamp", SortDirection.DESCENDING);
     PreparedQuery results = datastore.prepare(query);
 
-    for (Entity entity : results.asIterable()) {
-      try {
-        String idString = entity.getKey().getName();
-        UUID id = UUID.fromString(idString);
-        String text = (String) entity.getProperty("text");
-        long timestamp = (long) entity.getProperty("timestamp");
-
-        Message message = new Message(id, user, text, timestamp);
-        messages.add(message);
-      } catch (Exception e) {
-        System.err.println("Error reading message.");
-        System.err.println(entity.toString());
-        e.printStackTrace();
-      }
-    }
+    List<Message> messages = this.processMessageQuery(results);
 
     return messages;
   }
 
+  /**
+   * Gets messages from all users.
+   * 
+   * @return a list of messages from all users. List is sorted by time descending.
+   */
+  public List<Message> getAllMessages(){
+	  Query query = new Query("Message")
+	    .addSort("timestamp", SortDirection.DESCENDING);
+	  PreparedQuery results = datastore.prepare(query);
+	  
+	  List<Message> messages = this.processMessageQuery(results);
+
+	  return messages;
+ }
   
-
-
-
+  /**
+   * Iterates through query results and returns a list of messages
+   * 
+   * @return a list of messages.
+   */
+  private List<Message> processMessageQuery(PreparedQuery queryResults) {
+	  List<Message> messages = new ArrayList<>();
+	  
+	  for (Entity entity : queryResults.asIterable()) {
+		try {
+			String idString = entity.getKey().getName();
+			UUID id = UUID.fromString(idString);
+			String user = (String) entity.getProperty("user");
+			String text = (String) entity.getProperty("text");
+			long timestamp = (long) entity.getProperty("timestamp");
+				
+			Message message = new Message(id, user, text, timestamp);
+			messages.add(message);
+		} catch (Exception e) {
+			System.err.println("Error reading message.");
+			System.err.println(entity.toString());
+			e.printStackTrace();
+		}
+	  }	
+	  
+	  return messages;
+  }
+  
   /** Returns the total number of messages for all users.
    * 
    *  @return total number of messages posted by all users, limited to 1000.
