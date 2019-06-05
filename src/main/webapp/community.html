@@ -14,10 +14,9 @@
         }).then((users) => {
           const userlist = document.getElementById('userlist');
           userlist.innerHTML = '';
-
           users.forEach((user) => {
-          const userListItem = buildUserListItem(user);
-          userlist.appendChild(userListItem);
+           const userListItem = buildUserListItem(user);
+           userlist.appendChild(userListItem);
           });
         });
       }
@@ -46,7 +45,7 @@
       <h1>Community Page</h1>
       <p>Here is a list of every user who has posted a message:</p>
       <hr/>
-      <ul id="list">Loading...</ul>
+      <ul id="userlist">Loading...</ul>
     </div>
   </body>
 </html>
