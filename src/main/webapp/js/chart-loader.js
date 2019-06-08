@@ -10,7 +10,7 @@ function drawChart(){
     var foodData = new google.visualization.DataTable();
 
     foodData.addColumn("string", "Food Title");
-    foodData.addColumn("number", "Carbon Footprint");
+    foodData.addColumn("number", "Carbon Footprint (kg)");
 
     foodData.addRows([
         ["Lamb", 39.2],
@@ -30,6 +30,7 @@ function drawChart(){
     ]);
 
     var options = {
+        "title" : "Greenhouse Gas Emissions Per Kilo of Food",
         "width" : 800,
         "height": 600
     };
@@ -42,3 +43,4 @@ function drawChart(){
 function buildUI() {
     initGoogleCharts();
 }
+
