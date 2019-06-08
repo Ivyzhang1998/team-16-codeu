@@ -65,7 +65,9 @@ public class MessageServlet extends HttpServlet {
     response.getWriter().println(json);
   }
 
-  /** Stores a new {@link Message}. */
+  /** Stores a new {@link Message}. If the user inputted text is a valid image URL, the submitted
+   * message will display the image instead of the image URL.
+   */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
@@ -78,7 +80,15 @@ public class MessageServlet extends HttpServlet {
     String user = userService.getCurrentUser().getEmail();
     String text = Jsoup.clean(request.getParameter("text"), Whitelist.none());
 
-    Message message = new Message(user, text);
+    //replace user inputted text if it fits the defined patten into an img tag
+    String regex = "(https?://\\S+\\.(png|jpg))";
+    String replacement = "<img src=\"$1\" />";
+    String replacedText = text.replaceAll(regex, replacement);
+
+    //***need to add url validation below***
+
+    //create and store message
+    Message message = new Message(user, replacedText);
     datastore.storeMessage(message);
 
     response.sendRedirect("/user-page.html?user=" + user);
