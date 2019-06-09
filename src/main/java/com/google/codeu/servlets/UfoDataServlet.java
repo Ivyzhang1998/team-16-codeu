@@ -10,9 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Scanner;
 
-/**
- * Returns UFO data as a JSON array, e.g. [{"lat": 38.4404675, "lng": -122.7144313}]
- */
+
 @WebServlet("/ufo-data")
 public class UfoDataServlet extends HttpServlet {
 
@@ -35,6 +33,10 @@ public class UfoDataServlet extends HttpServlet {
     }
     scanner.close();
   }
+
+  /**
+   * @return: UFO data as a JSON array, e.g. [{"lat": 38.4404675, "lng": -122.7144313}]
+   */
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
