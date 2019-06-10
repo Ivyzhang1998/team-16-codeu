@@ -24,7 +24,7 @@ public class UserListServlet extends HttpServlet {
   }
 
  /**
-   * Responds with a JSON representation of all users. 
+   * Responds with a JSON representation of all users.
    * Example JSON: ["user@test.com", "user2@test.com", "user3@example.com"]
    */
 
@@ -40,5 +40,3 @@ public class UserListServlet extends HttpServlet {
     /**let other programs (Front-End) to read directly into variables */
   }
 }
-
-
