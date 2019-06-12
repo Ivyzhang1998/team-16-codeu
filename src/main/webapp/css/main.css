@@ -30,3 +30,8 @@ nav li {
   display: inline-block;
   margin-right: 10px
 }
+
+.map{
+  width: 500px;
+  height: 500px;
+}
