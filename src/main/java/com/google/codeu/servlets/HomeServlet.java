@@ -17,22 +17,7 @@ public class HomeServlet extends HttpServlet {
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		
-		try {
-			UserService userService = UserServiceFactory.getUserService();
-
-			boolean isUserLoggedIn = userService.isUserLoggedIn();
-			request.setAttribute("isUserLoggedIn", isUserLoggedIn);
-
-			if (userService.isUserLoggedIn()) {
-				String username = userService.getCurrentUser().getEmail();
-				request.setAttribute("username", username);
-			}
-
-			request.getRequestDispatcher("/WEB-INF/views/index.jsp").forward(request, response);
-		} 
-		catch (Exception error) {
-			System.err.print(error);
-		}
+		request.getRequestDispatcher("/WEB-INF/views/index.jsp").forward(request, response);
 		
 	}
 	

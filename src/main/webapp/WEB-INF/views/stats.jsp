@@ -9,13 +9,8 @@
     <script src="/js/stats-page-loader.js"></script>
   </head>
   <body>
-    <nav>
-      <ul id="navigation">
-        <li><a href="/">Home</a></li>
-        <li><a href="/aboutus.html">About Our Team</a></li>
-        <li><a href="/stats.html">Stats</a></li>
-      </ul>
-    </nav>
+    <%@ include file="./components/navigation.jsp" %>
+    
     <div id="content">
       <h1>Site Statistics</h1>
       <hr/>
