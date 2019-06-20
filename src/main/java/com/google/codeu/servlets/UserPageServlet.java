@@ -8,14 +8,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
-@WebServlet("/")
-public class HomeServlet extends HttpServlet {
+@WebServlet("/user-page")
+public class UserPageServlet extends HttpServlet {
 
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		
-		request.getRequestDispatcher("/WEB-INF/views/index.jsp").forward(request, response);
+		request.getRequestDispatcher("/WEB-INF/views/user-page.jsp").forward(request, response);
 		
 	}
 	

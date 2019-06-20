@@ -17,7 +17,7 @@
       if (isUserLoggedIn) {
         String username = userService.getCurrentUser().getEmail();
       %>
-      <a href="/user-page.html?user=<%= username %>">Your Page</a>
+      <a href="/user-page?user=<%= username %>">Your Page</a>
       <a href="/logout">Logout</a>
       <% } else {   %>
       <a href="/login">Login</a>

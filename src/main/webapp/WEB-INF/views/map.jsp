@@ -7,6 +7,8 @@
     <script src="/js/map-loader.js"></script>
   </head>
   <body onload="createUfoSightingsMap();">
+    <%@ include file="./components/navigation.jsp" %>
+    
     <h1>UFO Sightings</h1>
     <div class="map"></div>
   </body>

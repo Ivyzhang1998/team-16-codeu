@@ -73,7 +73,7 @@ public class MessageServlet extends HttpServlet {
 
     UserService userService = UserServiceFactory.getUserService();
     if (!userService.isUserLoggedIn()) {
-      response.sendRedirect("/index.html");
+      response.sendRedirect("/");
       return;
     }
 
@@ -91,6 +91,6 @@ public class MessageServlet extends HttpServlet {
     Message message = new Message(user, replacedText);
     datastore.storeMessage(message);
 
-    response.sendRedirect("/user-page.html?user=" + user);
+    response.sendRedirect("/user-page?user=" + user);
   }
 }
