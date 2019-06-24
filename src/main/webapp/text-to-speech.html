@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>This is a sample text for testing</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <button onclick="playaudio()">Click me to play</button>
+  </head>
+
+  <figure>
+      <figcaption>Listen to the Audio:</figcaption>
+      <audio
+          controls
+          src="/media/examples/t-rex-roar.mp3">
+              Your browser does not support the
+              <code>audio</code> element.
+      </audio>
+  </figure>
+
+  <script>
+     function playaudio() {
+         text = document.getElementById("myAudio");
+         x.play();
+   }
+   </script>
+
+    <div id="message-form" onclick="getAudio(this)"> Message to be audio-ed</div>
+    <audio id=”myAudio”></audio>
+  </body>
+</html>
