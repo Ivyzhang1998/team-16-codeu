@@ -16,17 +16,17 @@
 
 package com.google.codeu.data;
 
-
+import java.util.UUID;
 /** A single message posted by a user. */
 public class FoodItem {
 
+  private UUID foodID;
   private String name;
-  private String amount;
   private double co2peryear;
 
-  public FoodItem(String name, String amount, double co2peryear) {
+  public FoodItem(String name, double co2peryear) {
     this.name = name;
-    this.amount = amount;
+    this.foodID = UUID.randomUUID();
     this.co2peryear = co2peryear;
   }
 
@@ -34,10 +34,9 @@ public class FoodItem {
     return name;
   }
 
-  public String getAmount() {
-    return amount;
+  public UUID getID() {
+    return foodID;
   }
-
 
   public double getCO2() {
     return co2peryear;
