@@ -19,6 +19,9 @@
             <p>Upload an image:</p>
             <input type="file" name="image">
             <br/><br/>
+            <p>Date eaten:</p>
+            <textarea placeholder="mm/dd/yyyy" name="date" required></textarea>
+            <br/><br/>
             <p>Food name:</p>
             <textarea name="foodName" required></textarea>
             <br/><br/>

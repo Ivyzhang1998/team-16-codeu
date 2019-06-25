@@ -32,6 +32,7 @@ public class FormHandlerServlet extends HttpServlet {
         // Get the message entered by the user.
         String foodName = request.getParameter("foodName");
         String amount = request.getParameter("amount");
+        String date = request.getParameter("date");
 
         // Get the URL of the image that the user uploaded to Blobstore.
         String imageUrl = getUploadedFileUrl(request, "image");
@@ -43,7 +44,7 @@ public class FormHandlerServlet extends HttpServlet {
         out.println("<a href=\"" + imageUrl + "\">");
         out.println("<img src=\"" + imageUrl + "\" />");
         out.println("</a>");
-        out.println("<p>You ate " + amount + " of this.</p>");
+        out.println("<p>You ate " + amount + " of this on " + date + ".</p>");
     }
 
     /**
