@@ -21,10 +21,10 @@ package com.google.codeu.data;
 public class FoodItem {
 
   private String name;
-  public String amount;
-  public double co2peryear;
+  private String amount;
+  private double co2peryear;
 
-  public FoodItem(String name, String amount, String country, double co2peryear) {
+  public FoodItem(String name, String amount, double co2peryear) {
     this.name = name;
     this.amount = amount;
     this.co2peryear = co2peryear;
@@ -39,7 +39,7 @@ public class FoodItem {
   }
 
 
-  public long getCO2() {
+  public double getCO2() {
     return co2peryear;
   }
 }
