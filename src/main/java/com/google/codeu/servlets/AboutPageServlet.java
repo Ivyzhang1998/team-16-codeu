@@ -11,12 +11,9 @@ import javax.servlet.http.HttpServletResponse;
 
 @WebServlet("/aboutus")
 public class AboutPageServlet extends HttpServlet {
-
+	
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-		
 		request.getRequestDispatcher("/WEB-INF/views/aboutus.jsp").forward(request, response);
-		
 	}
-	
 }
