@@ -7,36 +7,30 @@ function initGoogleCharts() {
 
 //Sets up chart data in a DataTable, draws a chart on the page
 function drawChart(){
-    var foodData = new google.visualization.DataTable();
+    fetch("/chartsdata")
+        .then((response) => {
+            return response.json();
+        })
+        .then((bookJson) => {
+            let bookData = new google.visualization.DataTable();
+            
+            //Columns for DataTable instance
+            bookData.addColumn("string", "Book Title");
+            bookData.addColumn("number", "Rating");
 
-    foodData.addColumn("string", "Food Title");
-    foodData.addColumn("number", "Carbon Footprint (kg)");
+            bookJson.forEach((book) => {
+                let bookRow = [book.title, book.rating];
+                bookData.addRow(bookRow);
+            });
 
-    foodData.addRows([
-        ["Lamb", 39.2],
-        ["Beef", 27.0],
-        ["Cheese", 13.5],
-        ["Pork", 12.1],
-        ["Chicken", 6.9],
-        ["Tuna", 6.1],
-        ["Eggs", 4.8],
-        ["Potatoes", 2.9],
-        ["Rice", 2.7],
-        ["Nuts", 2.3],
-        ["Beans/Tofu", 2.0],
-        ["Milk", 1.9],
-        ["Fruit", 1.1],
-        ["Lentils", 0.9]
-    ]);
-
-    var options = {
-        "title" : "Greenhouse Gas Emissions Per Kilo of Food",
-        "width" : 800,
-        "height": 600
-    };
-
-    var chart = new google.visualization.BarChart(document.getElementById("chart"));
-    chart.draw(foodData, options);
+            let options = {
+                "width" : 800,
+                "height": 600
+            };
+        
+            let chart = new google.visualization.BarChart(document.getElementById("chart"));
+            chart.draw(bookData, options);
+        });
 }
 
 // Fetch data and populate the UI of the page.
