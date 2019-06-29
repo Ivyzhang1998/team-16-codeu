@@ -1,6 +1,6 @@
 <%-- The Java code in this JSP file runs on the server when the user navigates
-     to the homepage. This allows us to insert the Blobstore upload URL into the
-     form without building the HTML using print statements in a servlet. --%>
+     to the homepage. The user will be able to upload an image of the food that
+     they ate, and the accompanying info about the food.--%>
 <%@ page import="com.google.appengine.api.blobstore.BlobstoreService" %>
 <%@ page import="com.google.appengine.api.blobstore.BlobstoreServiceFactory" %>
 <% BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
@@ -16,17 +16,17 @@
         <p>Log what you ate and then click submit!</p>
 
         <form method="POST" enctype="multipart/form-data" action="<%= uploadUrl %>">
-            <p>Upload an image:</p>
-            <input type="file" name="image">
+            <label for="image">Upload an image:</label>
+            <input type="file" name="image" id="image">
             <br/><br/>
-            <p>Date eaten:</p>
-            <textarea placeholder="mm/dd/yyyy" name="date" required></textarea>
+            <label for="foodName">Food name:</label>
+            <input name="foodName" id="foodName" required>
             <br/><br/>
-            <p>Food name:</p>
-            <textarea name="foodName" required></textarea>
+            <label for="date">Date eaten:</label>
+            <input type="text" placeholder="mm/dd/yyyy" name="date" id="date" required>
             <br/><br/>
-            <p>Amount eaten:</p>
-            <textarea name="amount" required></textarea>
+            <label for="amount">Amount eaten:</label>
+            <textarea name="amount" id="amount" required></textarea>
             <br/>
             <button>Submit</button>
         </form>

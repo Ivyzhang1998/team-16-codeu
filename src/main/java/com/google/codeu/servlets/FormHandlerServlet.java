@@ -53,7 +53,7 @@ public class FormHandlerServlet extends HttpServlet {
     private String getUploadedFileUrl(HttpServletRequest request, String formInputElementName){
         BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
         Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(request);
-        List<BlobKey> blobKeys = blobs.get("image");
+        List<BlobKey> blobKeys = blobs.get(formInputElementName);
 
         // User submitted form without selecting a file, so we can't get a URL. (devserver)
         if(blobKeys == null || blobKeys.isEmpty()) {
@@ -70,8 +70,11 @@ public class FormHandlerServlet extends HttpServlet {
             return null;
         }
 
-        // We could check the validity of the file here, e.g. to make sure it's an image file
-        // https://stackoverflow.com/q/10779564/873165
+        // check that uploaded file is an image
+        if (!blobInfo.getContentType().substring(0,5).equals("image")) {
+            System.out.println(blobInfo.getContentType().substring(0,5));
+            return null;
+        }
 
         // Use ImagesService to get a URL that points to the uploaded file.
         ImagesService imagesService = ImagesServiceFactory.getImagesService();
