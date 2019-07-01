@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 
-@WebServlet("/chartsdata")
+@WebServlet("/chartsdata/*")
 public class ChartsDataServlet extends HttpServlet{
 	
 	private JsonArray userMealArray;
@@ -39,7 +39,7 @@ public class ChartsDataServlet extends HttpServlet{
 	 * */
 	@Override
 	public void init() {
-		userMealArray = new JsonArray();
+		this.userMealArray = new JsonArray();
 		Gson gson = new Gson();
 		for (int i = 0; i < 7; i++) {
 			LocalDate mealDate = LocalDate.now().minusDays(i);
@@ -47,18 +47,31 @@ public class ChartsDataServlet extends HttpServlet{
 				//Carbon Footprint will be a random number between 1 and 50
 				double carbonFootprint = Math.random() * 49 + 1;
 				UserMeal userMeal = new UserMeal(carbonFootprint, mealDate);
-				userMealArray.add(gson.toJsonTree(userMeal));
+				this.userMealArray.add(gson.toJsonTree(userMeal));
 			}
 		}
 	}
 
 	/*
 	 * Sends a JSON response after a GET request
+	 * Parses the wild-card route, and calls respective helper method to get data
+	 * for that route.
 	 * Example JSON Response: [{movieTitle, rating},{movieTitle, rating}]
 	 * */
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		response.setContentType("application/json");
-		response.getOutputStream().println(userMealArray.toString());
+		String requestUrl = request.getRequestURI();
+		
+		if(requestUrl.endsWith("all")) {
+			response.getOutputStream().println(this.listMealsForUser());
+		}
+	}
+	
+	/*
+	 * Returns a JSON array of meals
+	 */
+	private String listMealsForUser() {
+		return this.userMealArray.toString();
 	}
 }
