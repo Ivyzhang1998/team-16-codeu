@@ -1,7 +1,7 @@
 package com.google.codeu.servlets;
 
 import java.io.IOException;
-import java.util.Scanner;
+import java.time.LocalDate;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,42 +15,41 @@ import com.google.gson.JsonArray;
 @WebServlet("/chartsdata")
 public class ChartsDataServlet extends HttpServlet{
 	
-	private JsonArray bookRatingArray;
+	private JsonArray userMealArray;
 
 	/*
-	 * Class that will hold the data for each element in the CSV file
-	 * Could go in a separate file if needed.
-	 * 
+	 * Class that models the JSON for our dummy data.
+	 * carbonFootprint will eventually be calculated from the map of FoodItems
+	 * For now, it is assigned a random value
 	 * */
-	private static class bookRating {
-		String title;
-		double rating;
+	private static class UserMeal {
+		double carbonFootprint;
+		LocalDate date;
 
-		private bookRating(String title, double rating) {
-			this.title = title;
-			this.rating = rating;
+		private UserMeal(double carbonFootprint, LocalDate date) {
+			this.carbonFootprint = carbonFootprint;
+			this.date = date;
 		}
 	}
 	
 	/*
-	 * Reads the Book Ratings CSV File and adds the elements to a JsonArray
+	 * Generates Dummy data to be sent in GET requests
+	 * Creates 21 user meals. 7 days * 3 Meals per day.
+	 * TODO: Connect this servlet with FoodItems and UserMeals in the Datastore.
 	 * */
 	@Override
 	public void init() {
-		bookRatingArray = new JsonArray();
+		userMealArray = new JsonArray();
 		Gson gson = new Gson();
-		Scanner scanner = new Scanner(getServletContext().getResourceAsStream("/WEB-INF/book-ratings.csv"));
-		scanner.nextLine(); // skips first line (the csv header)
-		while (scanner.hasNextLine()) {
-			String line = scanner.nextLine();
-			String[] cells = line.split(",");
-
-			String curTitle = cells[5];
-			double curRating = Double.parseDouble(cells[6]);
-
-			bookRatingArray.add(gson.toJsonTree(new bookRating(curTitle, curRating)));
+		for (int i = 0; i < 7; i++) {
+			LocalDate mealDate = LocalDate.now().minusDays(i);
+			for(int j = 0; j < 3; j++) {
+				//Carbon Footprint will be a random number between 1 and 50
+				double carbonFootprint = Math.random() * 49 + 1;
+				UserMeal userMeal = new UserMeal(carbonFootprint, mealDate);
+				userMealArray.add(gson.toJsonTree(userMeal));
+			}
 		}
-		scanner.close();
 	}
 
 	/*
@@ -60,6 +59,6 @@ public class ChartsDataServlet extends HttpServlet{
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		response.setContentType("application/json");
-		response.getOutputStream().println(bookRatingArray.toString());
+		response.getOutputStream().println(userMealArray.toString());
 	}
 }
