@@ -56,7 +56,7 @@ public class ChartsDataServlet extends HttpServlet{
 	 * Sends a JSON response after a GET request
 	 * Parses the wild-card route, and calls respective helper method to get data
 	 * for that route.
-	 * Example JSON Response: [{movieTitle, rating},{movieTitle, rating}]
+	 * Example JSON Response: [{carbonFootprint, date},{carbonFootprint, date}]
 	 * */
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
@@ -69,7 +69,7 @@ public class ChartsDataServlet extends HttpServlet{
 	}
 	
 	/*
-	 * Returns a JSON array of meals
+	 * Returns the string representation of the userMeals JSON array
 	 */
 	private String listMealsForUser() {
 		return this.userMealArray.toString();
