@@ -47,17 +47,16 @@ public class Datastore {
 
     /** Stores FoodItem in Datastore. */
   public void storeFood(FoodItem food) {
-    Entity foodentity = new Entity("FoodItem", food.getID().toString());
-    foodentity.setProperty("name", food.getName());
-    foodentity.setProperty("CO2", food.getCO2());
+    Entity foodEntity = new Entity("FoodItem", food.getID().toString());
+    foodEntity.setProperty("Name", food.getName());
+    foodEntity.setProperty("CO2", food.getCO2());
     datastore.put(foodentity);
-
   }
 
   /** Stores Meal in Datastore. */
   public void storeMeal(UserMeal meal) {
     Entity mealEntity = new Entity("UserMeal", meal.getMealID().toString());
-    mealEntity.setProperty("Foods_and_Amounts", meal.getfood_amount());
+    mealEntity.setProperty("FoodAmount", meal.getfood_amount());
     mealEntity.setProperty("Date", meal.getDate());
     datastore.put(mealEntity);
   }
