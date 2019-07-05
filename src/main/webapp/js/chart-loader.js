@@ -7,29 +7,30 @@ function initGoogleCharts() {
 
 //Sets up chart data in a DataTable, draws a chart on the page
 function drawChart(){
-    fetch("/chartsdata")
+    fetch("/chartsdata/week")
         .then((response) => {
             return response.json();
         })
-        .then((bookJson) => {
-            let bookData = new google.visualization.DataTable();
+        .then((entries) => {
+            let chartData = new google.visualization.DataTable();
             
             //Columns for DataTable instance
-            bookData.addColumn("string", "Book Title");
-            bookData.addColumn("number", "Rating");
+            chartData.addColumn("string", "Date");
+            chartData.addColumn("number", "Carbon Footprint");
 
-            bookJson.forEach((book) => {
-                let bookRow = [book.title, book.rating];
-                bookData.addRow(bookRow);
-            });
+            let dates = Object.keys(entries);
+            for(let i = 0; i < dates.length; i++) {
+                let entryRow = [dates[i], entries[dates[i]]];
+                chartData.addRow(entryRow);
+            }
 
             let options = {
-                "width" : 800,
-                "height": 600
+                "width" : 1200,
+                "height": 800
             };
         
-            let chart = new google.visualization.BarChart(document.getElementById("chart"));
-            chart.draw(bookData, options);
+            let chart = new google.visualization.LineChart(document.getElementById("chart"));
+            chart.draw(chartData, options);
         });
 }
 
