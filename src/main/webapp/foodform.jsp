@@ -23,10 +23,10 @@
             <input name="foodName" id="foodName" required>
             <br/><br/>
             <label for="date">Date eaten:</label>
-            <input type="text" placeholder="mm/dd/yyyy" name="date" id="date" required>
+            <input type="date" name="date" id="date" required>
             <br/><br/>
             <label for="amount">Amount eaten:</label>
-            <textarea name="amount" id="amount" required></textarea>
+            <input type="number" name="amount" id="amount" required>
             <br/>
             <button>Submit</button>
         </form>

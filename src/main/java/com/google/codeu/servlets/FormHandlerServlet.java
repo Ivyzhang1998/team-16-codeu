@@ -15,13 +15,16 @@ import com.google.cloud.vision.v1.EntityAnnotation;
 import com.google.cloud.vision.v1.Feature;
 import com.google.cloud.vision.v1.Image;
 import com.google.cloud.vision.v1.ImageAnnotatorClient;
+import com.google.codeu.data.Datastore;
+import com.google.codeu.data.UserMeal;
+import com.google.common.base.Strings;
 import com.google.protobuf.ByteString;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -38,36 +41,32 @@ public class FormHandlerServlet extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         PrintWriter out = response.getWriter();
-
-        // Get the message entered by the user.
-        String foodName = request.getParameter("foodName");
-        String amount = request.getParameter("amount");
-        String date = request.getParameter("date");
-
         BlobKey blobKey = getBlobKey(request, "image");
+        UserMeal meal = addMealForUser(request, blobKey);
 
-        if (blobKey.equals(null)) {
-            out.println("Please upload an image file.");
+        DateFormat format = new SimpleDateFormat("MMM dd, yyyy");
+
+        if (blobKey == null) {
+            out.println("<p>You ate " + meal.getAmounts().get(0) + " of "  + meal.getFoods().get(0) +
+                    " on " + format.format(meal.getDate()) + ".</p>");
             return;
         }
-
-        // Get the URL of the image that the user uploaded to Blobstore.
-        String imageUrl = getUploadedFileUrl(blobKey);
 
         // Get the labels of the image that the user uploaded.
         byte[] blobBytes = getBlobBytes(blobKey);
         List<EntityAnnotation> imageLabels = getImageLabels(blobBytes);
 
-        // Output some HTML that shows the data the user entered.
-        // TODO store in Datastore instead of just printing out
 
-        out.println("<p>Here's the "  + foodName + " you uploaded</p>");
-        out.println("<a href=\"" + imageUrl + "\">");
-        out.println("<img src=\"" + imageUrl + "\" />");
+        // Output some HTML that shows the data the user entered.
+
+        out.println("<p>Here's the "  + meal.getFoods().get(0) + " you uploaded</p>");
+        out.println("<a href=\"" + meal.getImageUrl() + "\">");
+        out.println("<img src=\"" + meal.getImageUrl() + "\" />");
         out.println("</a>");
-        out.println("<p>You ate " + amount + " of this on " + date + ".</p>");
+        out.println("<p>You ate " + meal.getAmounts().get(0) + " of this on " + format.format(meal.getDate()) + ".</p>");
         out.println("<p>Here are the labels we extracted:</p>");
         out.println("<ul>");
+
         for(EntityAnnotation label : imageLabels){
             out.println("<li>" + label.getDescription() + " " + label.getScore());
         }
@@ -166,5 +165,44 @@ public class FormHandlerServlet extends HttpServlet {
         }
 
         return imageResponse.getLabelAnnotationsList();
+    }
+
+    /**
+     * Creates a UserMeal from the form entered by the user and then stores that meal into Datastore.
+     * TODO adjust so that form can take multiple foods at once to create the entire meal and then iterate to add all foods to meal
+     *
+     * @param request
+     * @param blobKey
+     * @return meal that was stored
+     */
+    private UserMeal addMealForUser(HttpServletRequest request, BlobKey blobKey) {
+        Datastore datastore = new Datastore();
+        // Get the message entered by the user.
+        String foodName = request.getParameter("foodName");
+        double amount = Double.parseDouble(request.getParameter("amount"));
+        String date = request.getParameter("date");
+        String imageUrl;
+
+        // Get the URL of the image that the user uploaded to Blobstore.
+        // If user didn't upload an image, want to replace the null with an empty string to avoid null pointer exceptions
+        if (blobKey == null) {
+            imageUrl = "";
+        } else {
+            imageUrl = getUploadedFileUrl(blobKey);
+        }
+
+        // Convert UserMeal parameters to their correct types
+        ArrayList<String> foods = new ArrayList<>();
+        foods.add(foodName);
+
+        ArrayList<Double> amounts = new ArrayList<>();
+        amounts.add(amount);
+
+        String[] yearMonthDay = date.split("-");
+        Date mealDate = new Date(Integer.parseInt(yearMonthDay[0]), Integer.parseInt(yearMonthDay[1]) - 1, Integer.parseInt(yearMonthDay[2]));
+
+        UserMeal meal =  new UserMeal(foods, amounts, mealDate, imageUrl);
+        datastore.storeMeal(meal);
+        return meal;
     }
 }
