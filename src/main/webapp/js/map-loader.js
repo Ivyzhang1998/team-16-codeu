@@ -4,7 +4,7 @@ function createUfoSightingsMap(){
     return response.json();
   }).then((ufoSightings) => {
 
-    const map = new google.maps.Map(document.getElementByClassName('map'), {
+    const map = new google.maps.Map(document.getElementsByClassName('map'), {
       center: {lat: 35.78613674, lng: -119.4491591},
       zoom:7
     });
