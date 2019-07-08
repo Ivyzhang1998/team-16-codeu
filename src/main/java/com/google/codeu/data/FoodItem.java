@@ -4,13 +4,13 @@ package com.google.codeu.data;
 import java.util.UUID;
 public class FoodItem {
 
-  private UUID id;
+  private UUID foodId;
   private String name;
   private double co2PerYear;
 
   public FoodItem(String name, double co2PerYear) {
     this.name = name;
-    this.foodID = UUID.randomUUID();
+    this.foodId = UUID.randomUUID();
     this.co2PerYear = co2PerYear;
   }
 
@@ -19,7 +19,7 @@ public class FoodItem {
   }
 
   public UUID getID() {
-    return id;
+    return foodId;
   }
 
   public double getCO2PerYear() {

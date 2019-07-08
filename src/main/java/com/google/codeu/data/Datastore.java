@@ -49,18 +49,18 @@ public class Datastore {
   public void storeFood(FoodItem food) {
     Entity foodEntity = new Entity("FoodItem", food.getID().toString());
     foodEntity.setProperty("Name", food.getName());
-    foodEntity.setProperty("CO2", food.getCO2());
-    datastore.put(foodentity);
+    foodEntity.setProperty("CO2", food.getCO2PerYear());
+    datastore.put(foodEntity);
   }
 
   /** Stores Meal in Datastore. */
   public void storeMeal(UserMeal meal) {
-    Entity mealEntity = new Entity("UserMeal", meal.getMealID().toString());
-    mealEntity.setProperty("FoodAmount", meal.getfood_amount());
+    Entity mealEntity = new Entity("UserMeal", meal.getID().toString());
+    mealEntity.setProperty("Foods", meal.getFoods());
+    mealEntity.setProperty("Amounts", meal.getAmounts());
     mealEntity.setProperty("Date", meal.getDate());
     datastore.put(mealEntity);
   }
-
   //need to find a way to get the ID of the user who is uploading a meal
 
 
@@ -133,21 +133,13 @@ public class Datastore {
     Query query = new Query("Message");
     PreparedQuery results = datastore.prepare(query);
     return results.countEntities(FetchOptions.Builder.withLimit(1000));
-
-}
-
-
-
-
-
+  }
 
   /**Fetch a list of users based on all of the messages stored in Dataset
    *
    * @return a list of users who have posted messages
    *
    */
-
-
   public Set<String> getUsers(){
       Set<String> users = new HashSet<>();
       Query query = new Query("Message");
