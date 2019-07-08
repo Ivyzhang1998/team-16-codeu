@@ -2,13 +2,13 @@ package com.google.codeu.servlets;
 
 import java.io.IOException;
 
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.codeu.data.Datastore;
-import com.google.gson.JsonObject;
 
 /**
  * Handles fetching site statistics.
@@ -23,22 +23,16 @@ public class StatsPageServlet extends HttpServlet{
     datastore = new Datastore();
   }
 
-  /**
-   * Responds with site statistics in JSON. 
-   * Example JSON object: {"messageCount": 5, "userCount": 3}
-   */
   @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response)
-      throws IOException {
-
-    response.setContentType("application/json");
+  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
     int messageCount = datastore.getTotalMessageCount();
     int userCount = datastore.getUsers().size();
 
-    JsonObject jsonObject = new JsonObject();
-    jsonObject.addProperty("messageCount", messageCount);
-    jsonObject.addProperty("userCount", userCount);
-    response.getOutputStream().println(jsonObject.toString());
+    request.setAttribute("messageCount", messageCount);
+    request.setAttribute("userCount", userCount);
+    
+    request.getRequestDispatcher("/WEB-INF/views/stats.jsp").forward(request, response);
   }
+  
 }
