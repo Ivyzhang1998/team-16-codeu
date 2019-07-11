@@ -19,6 +19,7 @@ package com.google.codeu.data;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.codeu.data.FoodItem;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
@@ -37,6 +38,7 @@ public class Datastore {
 
   /** Stores the Message in Datastore. */
   public void storeMessage(Message message) {
+    Query query = new Query("Message");
     Entity messageEntity = new Entity("Message", message.getId().toString());
     messageEntity.setProperty("user", message.getUser());
     messageEntity.setProperty("text", message.getText());
@@ -45,12 +47,27 @@ public class Datastore {
     datastore.put(messageEntity);
   }
 
-    /** Stores FoodItem in Datastore. */
+    /** Stores FoodItem in Datastore.
+      * Prevent the same food from being entered into the database more than once
+      */
+
   public void storeFood(FoodItem food) {
+    boolean foodexist = false;
+    Query query = new Query("FoodItem");
+    PreparedQuery results = datastore.prepare(query);
+    for(Entity entity : results.asIterable()) {
+          if(entity == food):
+          {
+            foodexist = true;
+            break;
+          }
+    if(foodexist == false):{
     Entity foodEntity = new Entity("FoodItem", food.getID().toString());
     foodEntity.setProperty("Name", food.getName());
     foodEntity.setProperty("CO2", food.getCO2PerYear());
     datastore.put(foodEntity);
+  }
+  }
   }
 
   /** Stores Meal in Datastore. */
@@ -149,6 +166,8 @@ public class Datastore {
       }
      return users;
   }
+
+
 
 
 }
