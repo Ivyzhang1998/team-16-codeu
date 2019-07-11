@@ -52,22 +52,17 @@ public class Datastore {
       */
 
   public void storeFood(FoodItem food) {
-    boolean foodexist = false;
-    Query query = new Query("FoodItem");
-    PreparedQuery results = datastore.prepare(query);
-    for(Entity entity : results.asIterable()) {
-          if(entity == food):
-          {
-            foodexist = true;
-            break;
-          }
-    if(foodexist == false):{
-    Entity foodEntity = new Entity("FoodItem", food.getID().toString());
-    foodEntity.setProperty("Name", food.getName());
-    foodEntity.setProperty("CO2", food.getCO2PerYear());
-    datastore.put(foodEntity);
-  }
-  }
+    Set<String> existingfood = this.getFoodItem();
+    if(existingfood.contains(food.getName())){
+      return;
+    }
+    else {
+      Entity foodEntity = new Entity("FoodItem", food.getID().toString());
+      foodEntity.setProperty("Name", food.getName());
+      foodEntity.setProperty("CO2", food.getCO2PerYear());
+      datastore.put(foodEntity);
+      return;
+    }
   }
 
   /** Stores Meal in Datastore. */
@@ -165,6 +160,17 @@ public class Datastore {
          users.add((String) entity.getProperty("user"));
       }
      return users;
+  }
+
+  public Set<String> getFoodItem(){
+    Set<String> foodnames = new HashSet<>();
+    Query query = new Query("FoodItem");
+    PreparedQuery results = datastore.prepare(query);
+    for(Entity entity : results.asIterable()) {
+       foodnames.add((String) entity.getProperty("Name"));
+    }
+   return foodnames;
+
   }
 
 
