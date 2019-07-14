@@ -8,6 +8,8 @@ import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.google.appengine.api.images.ImagesService;
 import com.google.appengine.api.images.ImagesServiceFactory;
 import com.google.appengine.api.images.ServingUrlOptions;
+import com.google.appengine.api.users.User;
+import com.google.appengine.api.users.UserServiceFactory;
 import com.google.cloud.vision.v1.AnnotateImageRequest;
 import com.google.cloud.vision.v1.AnnotateImageResponse;
 import com.google.cloud.vision.v1.BatchAnnotateImagesResponse;
@@ -17,6 +19,7 @@ import com.google.cloud.vision.v1.Image;
 import com.google.cloud.vision.v1.ImageAnnotatorClient;
 import com.google.codeu.data.Datastore;
 import com.google.codeu.data.EatenMeal;
+import com.google.codeu.data.FoodItem;
 import com.google.protobuf.ByteString;
 import org.apache.http.HttpStatus;
 import org.jsoup.HttpStatusException;
@@ -44,37 +47,17 @@ public class FormHandlerServlet extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        PrintWriter out = response.getWriter();
-        BlobKey blobKey = getBlobKey(request, "image");
-        EatenMeal meal = addMealForUser(request, blobKey);
+        String formId = request.getParameter("form-id");
 
-        DateFormat format = new SimpleDateFormat("MMM dd, yyyy");
-
-        if (blobKey == null) {
-            out.println("<p>You ate " + meal.getAmounts().get(0) + " of "  + meal.getFoods().get(0) +
-                    " on " + format.format(meal.getDate()) + ".</p>");
-            return;
+        if (formId.isEmpty()) {
+            throw new HttpStatusException("Form id must not be empty.", HttpStatus.SC_BAD_REQUEST, request.getRequestURI());
+        } else if (formId.equals("eaten")) {
+            handleEatenFood(request, response);
+        } else if (formId.equals("co2")) {
+            handleCO2food(request, response);
+        } else {
+            throw new HttpStatusException("Invalid form given.", HttpStatus.SC_BAD_REQUEST, request.getRequestURI());
         }
-
-        // Get the labels of the image that the user uploaded.
-        byte[] blobBytes = getBlobBytes(blobKey);
-        List<EntityAnnotation> imageLabels = getImageLabels(blobBytes);
-
-
-        // Output some HTML that shows the data the user entered.
-
-        out.println("<p>Here's the "  + meal.getFoods().get(0) + " you uploaded</p>");
-        out.println("<a href=\"" + meal.getImageUrl() + "\">");
-        out.println("<img src=\"" + meal.getImageUrl() + "\" />");
-        out.println("</a>");
-        out.println("<p>You ate " + meal.getAmounts().get(0) + " of this on " + format.format(meal.getDate()) + ".</p>");
-        out.println("<p>Here are the labels we extracted:</p>");
-        out.println("<ul>");
-
-        for(EntityAnnotation label : imageLabels){
-            out.println("<li>" + label.getDescription() + " " + label.getScore());
-        }
-        out.println("</ul>");
     }
 
     /**
@@ -171,6 +154,49 @@ public class FormHandlerServlet extends HttpServlet {
         return imageResponse.getLabelAnnotationsList();
     }
 
+    private void handleCO2food(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        PrintWriter out = response.getWriter();
+        FoodItem foodItem = addFoodItemForUser(request);
+        // Output some HTML that shows the data the user entered.
+
+        out.println("<p>You entered that  "  + foodItem.getName() + " produces " +  foodItem.getCO2PerYear() + " kg of CO2 per year.</p>");
+        out.println("<p>Thank you!</p>");
+    }
+
+    private void handleEatenFood(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        PrintWriter out = response.getWriter();
+        BlobKey blobKey = getBlobKey(request, "image");
+        EatenMeal meal = addMealForUser(request, blobKey);
+
+        DateFormat format = new SimpleDateFormat("MMM dd, yyyy");
+
+        if (blobKey == null) {
+            out.println("<p>You ate " + meal.getAmount() + " of "  + meal.getFood() +
+                    " on " + format.format(meal.getDate()) + ".</p>");
+            return;
+        }
+
+        // Get the labels of the image that the user uploaded.
+        byte[] blobBytes = getBlobBytes(blobKey);
+        List<EntityAnnotation> imageLabels = getImageLabels(blobBytes);
+
+
+        // Output some HTML that shows the data the user entered.
+
+        out.println("<p>Here's the "  + meal.getFood() + " you uploaded</p>");
+        out.println("<a href=\"" + meal.getImageUrl() + "\">");
+        out.println("<img src=\"" + meal.getImageUrl() + "\" />");
+        out.println("</a>");
+        out.println("<p>You ate " + meal.getAmount() + " of this on " + format.format(meal.getDate()) + ".</p>");
+        out.println("<p>Here are the labels we extracted:</p>");
+        out.println("<ul>");
+
+        for(EntityAnnotation label : imageLabels){
+            out.println("<li>" + label.getDescription() + " " + label.getScore());
+        }
+        out.println("</ul>");
+    }
+
     /**
      * Creates a EatenMeal from the form entered by the user and then stores that meal into Datastore.
      *
@@ -185,6 +211,7 @@ public class FormHandlerServlet extends HttpServlet {
         double amount = Double.parseDouble(request.getParameter("amount"));
         String date = request.getParameter("date");
         String mealTag = request.getParameter("mealType");
+        String userId = UserServiceFactory.getUserService().getCurrentUser().getUserId();
         String imageUrl;
 
         MealType mealType;
@@ -208,18 +235,30 @@ public class FormHandlerServlet extends HttpServlet {
             imageUrl = getUploadedFileUrl(blobKey);
         }
 
-        // Convert UserMeal parameters to their correct types
-        ArrayList<String> foods = new ArrayList<>();
-        foods.add(foodName);
-
-        ArrayList<Double> amounts = new ArrayList<>();
-        amounts.add(amount);
-
         String[] yearMonthDay = date.split("-");
         Date mealDate = new Date(Integer.parseInt(yearMonthDay[0]), Integer.parseInt(yearMonthDay[1]) - 1, Integer.parseInt(yearMonthDay[2]));
 
-        EatenMeal meal =  new EatenMeal(foods, amounts, mealDate, imageUrl, mealType);
+        EatenMeal meal =  new EatenMeal(userId, foodName, amount, mealDate, imageUrl, mealType);
         datastore.storeMeal(meal);
         return meal;
+    }
+
+    /**
+     * Creates a FoodItem from the form entered by the user and then stores that meal into Datastore.
+     *
+     * @param request
+     * @return meal that was stored
+     */
+    private FoodItem addFoodItemForUser(HttpServletRequest request) throws HttpStatusException {
+        Datastore datastore = new Datastore();
+
+        // Get the message entered by the user.
+        String foodName = request.getParameter("foodName");
+        Double co2Amount = Double.parseDouble(request.getParameter("co2"));
+
+        FoodItem foodItem = new FoodItem(foodName, co2Amount);
+
+        datastore.storeFood(foodItem);
+        return foodItem;
     }
 }

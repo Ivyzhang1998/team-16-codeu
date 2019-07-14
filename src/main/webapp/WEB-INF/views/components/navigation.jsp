@@ -12,6 +12,8 @@
       <li><a href="/stats">Stats</a></li>
       <li><a href="/charts">Charts</a></li>
       <li><a href="/map">Map</a></li>
+      <li><a href="/co2-food-form">Enter CO2 Data</a></li>
+      <li><a href="/eaten-food-form">Log a Food</a></li>
 
       <%
       boolean isUserLoggedIn = (boolean) userService.isUserLoggedIn();

@@ -2,22 +2,23 @@
 package com.google.codeu.data;
 
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 public class EatenMeal {
 
-  private UUID id; //Use it to match with user information (based on Message object)
-  private List<String> foods;
-  private List<Double> amounts;
+  private UUID id;
+  private String userId;
+  private String food;
+  private Double amount;
   private Date date; //Date(int year, int month, int date)
   private String imageUrl;
   private MealType mealType;
 
-  public EatenMeal (List<String> foods, List<Double> amounts, Date date , String imageUrl, MealType mealType) {
+  public EatenMeal (String userId, String foods, Double amount, Date date , String imageUrl, MealType mealType) {
     this.id = UUID.randomUUID();
-    this.foods = foods;
-    this.amounts = amounts;
+    this.userId = userId;
+    this.food = foods;
+    this.amount = amount;
     this.date = date;
     this.imageUrl = imageUrl;
     this.mealType = mealType;
@@ -27,12 +28,14 @@ public class EatenMeal {
     return id;
   }
 
-  public List<String> getFoods() {
-    return foods;
+  public String getUserId() { return userId; }
+
+  public String getFood() {
+    return food;
   }
 
-  public List<Double> getAmounts() {
-    return amounts;
+  public Double getAmount() {
+    return amount;
   }
 
   public Date getDate(){
