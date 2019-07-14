@@ -38,7 +38,6 @@ public class Datastore {
 
   /** Stores the Message in Datastore. */
   public void storeMessage(Message message) {
-    Query query = new Query("Message");
     Entity messageEntity = new Entity("Message", message.getId().toString());
     messageEntity.setProperty("user", message.getUser());
     messageEntity.setProperty("text", message.getText());
@@ -52,9 +51,8 @@ public class Datastore {
       */
 
   public void storeFood(FoodItem food) {
-    Set<String> existingfood = this.getFoodItem();
-    if(existingfood.contains(food.getName())){
-      return;
+    if (exists(food) == true){
+       return;
     }
     else {
       Entity foodEntity = new Entity("FoodItem", food.getID().toString());
@@ -63,6 +61,15 @@ public class Datastore {
       datastore.put(foodEntity);
       return;
     }
+  }
+
+  public boolean exists(FoodItem food) {
+    Set<String> existingFoods = this.getAllFoodItems();
+    Set<String> lowercaseFoods;
+    for (String food : existingFoods) {
+      lowercaseFoods.add(food.toLowerCase());
+    }
+    return lowercaseFoods.contains(food.getName().toLowerCase());
   }
 
   /** Stores Meal in Datastore. */
@@ -162,14 +169,14 @@ public class Datastore {
      return users;
   }
 
-  public Set<String> getFoodItem(){
+  public Set<String> getAllFoodItems(){
     Set<String> foodnames = new HashSet<>();
     Query query = new Query("FoodItem");
     PreparedQuery results = datastore.prepare(query);
     for(Entity entity : results.asIterable()) {
        foodnames.add((String) entity.getProperty("Name"));
     }
-   return foodnames;
+      return foodnames;
 
   }
 
