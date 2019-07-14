@@ -17,21 +17,16 @@ import java.util.Scanner;
 public class FoodItemServlet extends HttpServlet {
 
   private Datastore datastore;
-  //private JsonArray FoodArray;
 
   @Override
   public void init() {
     datastore = new Datastore();
-  //  FoodArray = new JsonArray();
   }
-  /**
-   * @return: UFO data as a JSON array, e.g. [{"lat": 38.4404675, "lng": -122.7144313}]
-   */
+
+  //One-time data upload of known foods into datastore
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    //response.setContentType("application/json");
 
-    Gson gson = new Gson();
     Scanner scanner = new Scanner(getServletContext().getResourceAsStream("/WEB-INF/FoodInfo.csv"));
     while(scanner.hasNextLine()) {
       String line = scanner.nextLine();
@@ -44,7 +39,6 @@ public class FoodItemServlet extends HttpServlet {
 
     }
     scanner.close();
-    //response.getOutputStream().println(FoodItem.toString());
   }
 
 }
