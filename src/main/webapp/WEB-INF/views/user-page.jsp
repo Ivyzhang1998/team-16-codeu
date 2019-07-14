@@ -6,6 +6,9 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/user-page.css">
+    <link rel="stylesheet" href="/css/spectre.min.css"/>
+    <link rel="stylesheet" href="/css/spectre-icons.min.css"/>
+    <link rel="stylesheet" href="/css/spectre-exp.min.css"/>
     <script src="/js/user-page-loader.js"></script>
   </head>
   <body onload="buildUI();">
