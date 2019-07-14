@@ -19,11 +19,16 @@
             <label for="image">Upload an image:</label>
             <input type="file" name="image" id="image">
             <br/><br/>
-            <label for="foodName">Food name:</label>
-            <input name="foodName" id="foodName" required>
-            <br/><br/>
             <label for="date">Date eaten:</label>
             <input type="date" name="date" id="date" required>
+            <br/><br/>
+            <label for="mealType">Meal:</label><br>
+            <input type="radio" name="mealType" id="mealType" value="breakfast">breakfast<br>
+            <input type="radio" name="mealType" value="lunch">lunch<br>
+            <input type="radio" name="mealType" value="dinner">dinner<br>
+            <input type="radio" name="mealType" value="snack">snack<br><br/>
+            <label for="foodName">Food name:</label>
+            <input name="foodName" id="foodName" required>
             <br/><br/>
             <label for="amount">Amount eaten:</label>
             <input type="number" name="amount" id="amount" required>
