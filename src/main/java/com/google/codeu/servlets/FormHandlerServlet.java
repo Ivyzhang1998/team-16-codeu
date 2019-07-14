@@ -16,9 +16,11 @@ import com.google.cloud.vision.v1.Feature;
 import com.google.cloud.vision.v1.Image;
 import com.google.cloud.vision.v1.ImageAnnotatorClient;
 import com.google.codeu.data.Datastore;
-import com.google.codeu.data.UserMeal;
-import com.google.common.base.Strings;
+import com.google.codeu.data.EatenMeal;
 import com.google.protobuf.ByteString;
+import org.apache.http.HttpStatus;
+import org.jsoup.HttpStatusException;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -29,6 +31,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import static com.google.codeu.data.EatenMeal.*;
 
 /**
  * When the user submits the form, Blobstore processes the file upload
@@ -42,7 +46,7 @@ public class FormHandlerServlet extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         PrintWriter out = response.getWriter();
         BlobKey blobKey = getBlobKey(request, "image");
-        UserMeal meal = addMealForUser(request, blobKey);
+        EatenMeal meal = addMealForUser(request, blobKey);
 
         DateFormat format = new SimpleDateFormat("MMM dd, yyyy");
 
@@ -168,20 +172,33 @@ public class FormHandlerServlet extends HttpServlet {
     }
 
     /**
-     * Creates a UserMeal from the form entered by the user and then stores that meal into Datastore.
-     * TODO adjust so that form can take multiple foods at once to create the entire meal and then iterate to add all foods to meal
+     * Creates a EatenMeal from the form entered by the user and then stores that meal into Datastore.
      *
      * @param request
      * @param blobKey
      * @return meal that was stored
      */
-    private UserMeal addMealForUser(HttpServletRequest request, BlobKey blobKey) {
+    private EatenMeal addMealForUser(HttpServletRequest request, BlobKey blobKey) throws HttpStatusException {
         Datastore datastore = new Datastore();
         // Get the message entered by the user.
         String foodName = request.getParameter("foodName");
         double amount = Double.parseDouble(request.getParameter("amount"));
         String date = request.getParameter("date");
+        String mealTag = request.getParameter("mealType");
         String imageUrl;
+
+        MealType mealType;
+        if (mealTag.equals("breakfast")) {
+            mealType = MealType.BREAKFAST;
+        } else if(mealTag.equals("lunch")) {
+            mealType = MealType.LUNCH;
+        } else if(mealTag.equals("dinner")) {
+            mealType = MealType.DINNER;
+        } else if(mealTag.equals("snack")) {
+            mealType = MealType.SNACK;
+        } else {    //shouldn't end up in else, but in case
+            throw new HttpStatusException("Meal tag is of an improper type.", HttpStatus.SC_BAD_REQUEST, request.getRequestURI());
+        }
 
         // Get the URL of the image that the user uploaded to Blobstore.
         // If user didn't upload an image, want to replace the null with an empty string to avoid null pointer exceptions
@@ -201,7 +218,7 @@ public class FormHandlerServlet extends HttpServlet {
         String[] yearMonthDay = date.split("-");
         Date mealDate = new Date(Integer.parseInt(yearMonthDay[0]), Integer.parseInt(yearMonthDay[1]) - 1, Integer.parseInt(yearMonthDay[2]));
 
-        UserMeal meal =  new UserMeal(foods, amounts, mealDate, imageUrl);
+        EatenMeal meal =  new EatenMeal(foods, amounts, mealDate, imageUrl, mealType);
         datastore.storeMeal(meal);
         return meal;
     }
