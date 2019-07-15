@@ -16,6 +16,7 @@
 
 package com.google.codeu.data;
 
+import java.util.Collections;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -63,13 +64,13 @@ public class Datastore {
     }
   }
 
-  public boolean exists(FoodItem food) {
+  public boolean exists(FoodItem onefood) {
     Set<String> existingFoods = this.getAllFoodItems();
-    Set<String> lowercaseFoods;
-    for (String food : existingFoods) {
-      lowercaseFoods.add(food.toLowerCase());
+    Set<String> lowercaseFoods = Collections.emptySet();
+    for (String fd : existingFoods) {
+      lowercaseFoods.add(fd.toLowerCase());
     }
-    return lowercaseFoods.contains(food.getName().toLowerCase());
+    return lowercaseFoods.contains(onefood.getName().toLowerCase());
   }
 
   /** Stores Meal in Datastore. */
