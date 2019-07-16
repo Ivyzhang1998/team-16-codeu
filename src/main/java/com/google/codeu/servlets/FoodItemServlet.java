@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.Scanner;
 
 
-@WebServlet("/food-data")
+@WebServlet("/bulk-food-data-upload")
 public class FoodItemServlet extends HttpServlet {
 
   private Datastore datastore;

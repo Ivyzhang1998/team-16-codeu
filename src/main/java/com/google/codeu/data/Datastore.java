@@ -51,25 +51,25 @@ public class Datastore {
       */
 
   public void storeFood(FoodItem food) {
-    if (exists(food) == true){
+    if (exists(food)){
        return;
     }
     else {
-      Entity foodEntity = new Entity("FoodItem", food.getID().toString());
-      foodEntity.setProperty("Name", food.getName());
-      foodEntity.setProperty("CO2", food.getCO2PerYear());
-      datastore.put(foodEntity);
-      return;
+       Entity foodEntity = new Entity("FoodItem", food.getID().toString());
+       foodEntity.setProperty("Name", food.getName());
+       foodEntity.setProperty("CO2", food.getCO2PerYear());
+       datastore.put(foodEntity);
+       return;
     }
   }
 
-  public boolean exists(FoodItem onefood) {
+  public boolean exists(FoodItem oneFood) {
     Set<String> existingFoods = this.getAllFoodItems();
     Set<String> lowercaseFoods = new HashSet<>();
-    for (String fd : existingFoods) {
-      lowercaseFoods.add(fd.toLowerCase());
+    for (String food : existingFoods) {
+      lowercaseFoods.add(food.toLowerCase());
     }
-    return lowercaseFoods.contains(onefood.getName().toLowerCase());
+    return lowercaseFoods.contains(oneFood.getName().toLowerCase());
   }
 
   /** Stores Meal in Datastore. */
@@ -166,7 +166,7 @@ public class Datastore {
       for(Entity entity : results.asIterable()) {
          users.add((String) entity.getProperty("user"));
       }
-     return users;
+      return users;
   }
 
   public Set<String> getAllFoodItems(){
@@ -176,7 +176,7 @@ public class Datastore {
     for(Entity entity : results.asIterable()) {
        foodnames.add((String) entity.getProperty("Name"));
     }
-      return foodnames;
+    return foodnames;
 
   }
 

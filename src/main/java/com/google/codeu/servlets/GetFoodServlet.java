@@ -37,6 +37,6 @@ public class GetFoodServlet extends HttpServlet {
     Gson gson = new Gson();
     String json = gson.toJson(allfood);
     response.getOutputStream().println(json);
-    /**let other programs (Front-End) to read directly into variables */
+    /** Lets other programs (Front-End) to read directly into variables */
   }
 }
