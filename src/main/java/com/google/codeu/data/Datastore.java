@@ -66,7 +66,7 @@ public class Datastore {
 
   public boolean exists(FoodItem onefood) {
     Set<String> existingFoods = this.getAllFoodItems();
-    Set<String> lowercaseFoods = Collections.emptySet();
+    Set<String> lowercaseFoods = new HashSet<>();
     for (String fd : existingFoods) {
       lowercaseFoods.add(fd.toLowerCase());
     }

@@ -23,16 +23,6 @@ public class FoodItemServlet extends HttpServlet {
     datastore = new Datastore();
   }
 
-  @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response)
-      throws IOException {
-    response.setContentType("application/json");
-    Set<String> allfood = datastore.getAllFoodItems();
-    Gson gson = new Gson();
-    String json = gson.toJson(allfood);
-    response.getOutputStream().println(json);
-  }
-
   //One-time data upload of known foods into datastore
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -43,10 +33,7 @@ public class FoodItemServlet extends HttpServlet {
       String[] cells = line.split(",");
       String foodname = cells[0];
       double co2 = Double.parseDouble(cells[1]);
-
       FoodItem food = new FoodItem(foodname, co2);
-      System.out.println(food.getName());
-      System.out.println("hahahahahaha my name is ivy hahahaha");
       datastore.storeFood(food);
 
     }
