@@ -19,6 +19,7 @@ package com.google.codeu.data;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.codeu.data.FoodItem;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
@@ -45,12 +46,30 @@ public class Datastore {
     datastore.put(messageEntity);
   }
 
-    /** Stores FoodItem in Datastore. */
+    /** Stores FoodItem in Datastore.
+      * Prevent the same food from being entered into the database more than once
+      */
+
   public void storeFood(FoodItem food) {
-    Entity foodEntity = new Entity("FoodItem", food.getID().toString());
-    foodEntity.setProperty("Name", food.getName());
-    foodEntity.setProperty("CO2", food.getCO2PerYear());
-    datastore.put(foodEntity);
+    if (exists(food)){
+       return;
+    }
+    else {
+       Entity foodEntity = new Entity("FoodItem", food.getID().toString());
+       foodEntity.setProperty("Name", food.getName());
+       foodEntity.setProperty("CO2", food.getCO2PerYear());
+       datastore.put(foodEntity);
+       return;
+    }
+  }
+
+  public boolean exists(FoodItem oneFood) {
+    Set<String> existingFoods = this.getAllFoodItems();
+    Set<String> lowercaseFoods = new HashSet<>();
+    for (String food : existingFoods) {
+      lowercaseFoods.add(food.toLowerCase());
+    }
+    return lowercaseFoods.contains(oneFood.getName().toLowerCase());
   }
 
   /** Stores Meal in Datastore. */
@@ -147,8 +166,21 @@ public class Datastore {
       for(Entity entity : results.asIterable()) {
          users.add((String) entity.getProperty("user"));
       }
-     return users;
+      return users;
   }
+
+  public Set<String> getAllFoodItems(){
+    Set<String> foodnames = new HashSet<>();
+    Query query = new Query("FoodItem");
+    PreparedQuery results = datastore.prepare(query);
+    for(Entity entity : results.asIterable()) {
+       foodnames.add((String) entity.getProperty("Name"));
+    }
+    return foodnames;
+
+  }
+
+
 
 
 }
