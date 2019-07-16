@@ -16,7 +16,6 @@
 
 package com.google.codeu.data;
 
-import java.util.Collections;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
