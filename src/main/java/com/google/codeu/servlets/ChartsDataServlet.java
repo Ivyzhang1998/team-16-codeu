@@ -1,6 +1,8 @@
 package com.google.codeu.servlets;
 
 import java.io.IOException;
+import java.time.Duration;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -81,17 +83,18 @@ public class ChartsDataServlet extends HttpServlet{
 	private void getLastSevenDays(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		response.setContentType("application/json");
 		String user = request.getParameter("user");
-		//Get the time seven days ago
-		LocalDate date = LocalDate.now().minusDays(7);
-		//Convert it to old style Date object
-		Date sevenDaysAgo = (Date) java.sql.Date.valueOf(date);
+		
+		//Get date from 7 days ago
+		Instant now = Instant.now();
+		Instant before = now.minus(Duration.ofDays(7));
+		Date sevenDaysAgo = Date.from(before);
 		
 		FilterPredicate dateFilter = new Query.FilterPredicate("date", Query.FilterOperator.GREATER_THAN, sevenDaysAgo);
 		FilterPredicate userFilter = new Query.FilterPredicate("user", Query.FilterOperator.EQUAL, user);
 		
 		Query query = new Query("UserMeal")
 							.setFilter(new Query.CompositeFilter(Query.CompositeFilterOperator.AND, Arrays.asList(dateFilter, userFilter)));
-							
+
 		PreparedQuery results = datastore.prepare(query);
 		List<UserMeal> meals = this.processMessageQuery(results);
 		Gson gson = new Gson();
