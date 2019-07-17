@@ -23,6 +23,7 @@ import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
 @WebServlet("/chartsdata/*")
 public class ChartsDataServlet extends HttpServlet{
@@ -72,11 +73,51 @@ public class ChartsDataServlet extends HttpServlet{
 		else if(analysisType.equals("lastSevenDays")) {
 			this.getLastSevenDays(request, response);
 		}
+		else if(analysisType.equals("breakdown")) {
+			this.getBreakdown(request, response);
+		}
 		else {
 			response.sendError(400, "Invalid analysis type");
 		}
 	}
 	
+	/*
+	 * Returns JSON response of UserMeals by category: breakfast, lunch, dinner, and snack
+	 * Example response: { "breakfast": [meal1, meal2], "lunch": [meal1, meal2] };
+	 * */
+	private void getBreakdown(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		response.setContentType("application/json");
+		String user = request.getParameter("user");
+		
+		JsonObject json = new JsonObject();
+		json.addProperty("breakfast", this.categoryQuery(user, "breakfast"));
+		json.addProperty("lunch", this.categoryQuery(user, "lunch"));
+		json.addProperty("dinner", this.categoryQuery(user, "dinner"));
+		json.addProperty("snack", this.categoryQuery(user, "snack"));
+		
+		response.getOutputStream().println(json.toString());
+	}
+	
+	/*
+	 * 
+	 * Queries the datastore for meals by mealType: breakfast, lunch, dinner, or snack
+	 * Returns the string representation of the JSON array
+	 * 
+	 * */
+	private String categoryQuery(String user, String mealType) {
+		FilterPredicate userFilter = new Query.FilterPredicate("user", Query.FilterOperator.EQUAL, user);
+		FilterPredicate mealTypeFilter = new Query.FilterPredicate("mealType", Query.FilterOperator.EQUAL, mealType);
+		
+		Query query = new Query("UserMeal")
+				.setFilter(new Query.CompositeFilter(Query.CompositeFilterOperator.AND, Arrays.asList(userFilter, mealTypeFilter)));
+		
+		PreparedQuery results = datastore.prepare(query);
+		List<UserMeal> meals = this.processMealQuery(results);
+		Gson gson = new Gson();
+		String JsonArray = gson.toJson(meals);
+		return JsonArray;
+	}
+
 	/*
 	 * Returns JSON response for user meals from the last seven days
 	 * */
@@ -96,10 +137,10 @@ public class ChartsDataServlet extends HttpServlet{
 							.setFilter(new Query.CompositeFilter(Query.CompositeFilterOperator.AND, Arrays.asList(dateFilter, userFilter)));
 
 		PreparedQuery results = datastore.prepare(query);
-		List<UserMeal> meals = this.processMessageQuery(results);
+		List<UserMeal> meals = this.processMealQuery(results);
 		Gson gson = new Gson();
-		String JsonRespone = gson.toJson(meals);
-		response.getOutputStream().println(JsonRespone);
+		String JsonResponse = gson.toJson(meals);
+		response.getOutputStream().println(JsonResponse);
 	}
 	
 	/*
@@ -107,7 +148,7 @@ public class ChartsDataServlet extends HttpServlet{
 	 *
 	 * @return a list of messages.
 	 */
-	private List<UserMeal> processMessageQuery(PreparedQuery queryResults) {
+	private List<UserMeal> processMealQuery(PreparedQuery queryResults) {
 		List<UserMeal> meals = new ArrayList<>();
 
 		for (Entity entity : queryResults.asIterable()) {
