@@ -55,15 +55,14 @@ public class Datastore {
 
   /** Stores Meal in Datastore. */
   public void storeMeal(EatenMeal meal) {
-    Entity mealEntity = new Entity("UserMeal", meal.getID().toString());
+    Entity mealEntity = new Entity("EatenMeak", meal.getID().toString());
     mealEntity.setProperty("Food", meal.getFood());
     mealEntity.setProperty("UserId", meal.getUserId());
     mealEntity.setProperty("Amount", meal.getAmount());
-    mealEntity.setProperty("MealType", meal.getMealType());
+    mealEntity.setProperty("MealType", meal.getMealType().ordinal());
     mealEntity.setProperty("Date", meal.getDate());
     datastore.put(mealEntity);
   }
-  //need to find a way to get the ID of the user who is uploading a meal
 
 
   /**

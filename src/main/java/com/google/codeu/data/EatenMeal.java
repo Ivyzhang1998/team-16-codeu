@@ -14,10 +14,10 @@ public class EatenMeal {
   private String imageUrl;
   private MealType mealType;
 
-  public EatenMeal (String userId, String foods, Double amount, Date date , String imageUrl, MealType mealType) {
+  public EatenMeal (String userId, String food, Double amount, Date date , String imageUrl, MealType mealType) {
     this.id = UUID.randomUUID();
     this.userId = userId;
-    this.food = foods;
+    this.food = food;
     this.amount = amount;
     this.date = date;
     this.imageUrl = imageUrl;
@@ -28,7 +28,9 @@ public class EatenMeal {
     return id;
   }
 
-  public String getUserId() { return userId; }
+  public String getUserId() {
+    return userId;
+  }
 
   public String getFood() {
     return food;
@@ -50,6 +52,7 @@ public class EatenMeal {
     return mealType;
   }
 
+  //When storing this property our datastore entity, we store the ordinal value instead, ie. breakfast = 0, lunch = 1
   public enum MealType {
     BREAKFAST, LUNCH, DINNER, SNACK;
   }

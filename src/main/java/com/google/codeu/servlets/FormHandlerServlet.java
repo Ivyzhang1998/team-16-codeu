@@ -187,7 +187,7 @@ public class FormHandlerServlet extends HttpServlet {
         out.println("<a href=\"" + meal.getImageUrl() + "\">");
         out.println("<img src=\"" + meal.getImageUrl() + "\" />");
         out.println("</a>");
-        out.println("<p>You ate " + meal.getAmount() + " of this on " + format.format(meal.getDate()) + ".</p>");
+        out.println("<p>You ate " + meal.getAmount() + " of this on " + format.format(meal.getDate()) + " for " + meal.getMealType() +".</p>");
         out.println("<p>Here are the labels we extracted:</p>");
         out.println("<ul>");
 
