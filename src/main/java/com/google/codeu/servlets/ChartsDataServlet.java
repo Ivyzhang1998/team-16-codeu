@@ -105,7 +105,7 @@ public class ChartsDataServlet extends HttpServlet{
 	 * 
 	 * */
 	private String categoryQuery(String user, int mealType) {
-		FilterPredicate userFilter = new Query.FilterPredicate("user", Query.FilterOperator.EQUAL, user);
+		FilterPredicate userFilter = new Query.FilterPredicate("userId", Query.FilterOperator.EQUAL, user);
 		FilterPredicate mealTypeFilter = new Query.FilterPredicate("mealType", Query.FilterOperator.EQUAL, mealType);
 		
 		Query query = new Query("UserMeal")
@@ -131,7 +131,7 @@ public class ChartsDataServlet extends HttpServlet{
 		Date sevenDaysAgo = Date.from(before);
 		
 		FilterPredicate dateFilter = new Query.FilterPredicate("date", Query.FilterOperator.GREATER_THAN, sevenDaysAgo);
-		FilterPredicate userFilter = new Query.FilterPredicate("user", Query.FilterOperator.EQUAL, user);
+		FilterPredicate userFilter = new Query.FilterPredicate("userId", Query.FilterOperator.EQUAL, user);
 		
 		Query query = new Query("UserMeal")
 							.setFilter(new Query.CompositeFilter(Query.CompositeFilterOperator.AND, Arrays.asList(dateFilter, userFilter)));
