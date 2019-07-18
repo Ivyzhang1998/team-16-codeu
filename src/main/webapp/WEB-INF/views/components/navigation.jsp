@@ -11,7 +11,6 @@
       <li><a href="/feed">Public Feed</a></li>
       <li><a href="/stats">Stats</a></li>
       <li><a href="/charts">Charts</a></li>
-      <li><a href="/map">Map</a></li>
 
       <%
       boolean isUserLoggedIn = (boolean) userService.isUserLoggedIn();
