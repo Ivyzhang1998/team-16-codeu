@@ -177,6 +177,16 @@ public class Datastore {
        foodnames.add((String) entity.getProperty("Name"));
     }
     return foodnames;
+  }
+
+  public double getCO2forOneUnitFood(String foodname){
+    Map<String,double> Names_to_CO2 = new HashMap<>();
+    Query query = new Query("FoodItem");
+    PreparedQuery results = datastore.prepare(query);
+    for(Entity entity : results.asIterable()) {
+       Names_to_CO2.put((String) entity.getProperty("Name"), (double)entity.getProperty("CO2"));
+    }
+    return Names_to_CO2.get(foodname);
 
   }
 
