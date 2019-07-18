@@ -90,10 +90,10 @@ public class ChartsDataServlet extends HttpServlet{
 		String user = request.getParameter("user");
 		
 		JsonObject json = new JsonObject();
-		json.addProperty("breakfast", this.categoryQuery(user, "breakfast"));
-		json.addProperty("lunch", this.categoryQuery(user, "lunch"));
-		json.addProperty("dinner", this.categoryQuery(user, "dinner"));
-		json.addProperty("snack", this.categoryQuery(user, "snack"));
+		json.addProperty("breakfast", this.categoryQuery(user, 0));
+		json.addProperty("lunch", this.categoryQuery(user, 1));
+		json.addProperty("dinner", this.categoryQuery(user, 2));
+		json.addProperty("snack", this.categoryQuery(user, 3));
 		
 		response.getOutputStream().println(json.toString());
 	}
@@ -104,7 +104,7 @@ public class ChartsDataServlet extends HttpServlet{
 	 * Returns the string representation of the JSON array
 	 * 
 	 * */
-	private String categoryQuery(String user, String mealType) {
+	private String categoryQuery(String user, int mealType) {
 		FilterPredicate userFilter = new Query.FilterPredicate("user", Query.FilterOperator.EQUAL, user);
 		FilterPredicate mealTypeFilter = new Query.FilterPredicate("mealType", Query.FilterOperator.EQUAL, mealType);
 		
