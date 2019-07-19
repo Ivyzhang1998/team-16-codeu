@@ -5,10 +5,10 @@
   <head>
     <meta charset="UTF-8"/>
     <title>FoodO2</title>
-    <link rel="stylesheet" href="/css/main.css"/>
     <link rel="stylesheet" href="/css/spectre.min.css"/>
     <link rel="stylesheet" href="/css/spectre-icons.min.css"/>
     <link rel="stylesheet" href="/css/spectre-exp.min.css"/>
+    <link rel="stylesheet" href="/css/main.css"/>
   </head>
 
   <body>
@@ -16,7 +16,7 @@
 
     <div class="container">
       <div class="columns">
-        <img src="lowcarbdiet.jpg" width="600" height="310">
+        <img src= "lowcarbdiet.jpg", width="600", height="300">
         <div class="column col-8-col-mx-auto">
             <div class="hero hero-sm bg-dark">
                 <div class="hero-body">
