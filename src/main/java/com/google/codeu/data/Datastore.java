@@ -180,15 +180,15 @@ public class Datastore {
     return foodnames;
   }
 
-  public double getCO2forOneUnitFood(String FoodName){
+  public double getCO2forOneUnitFood(String foodName){
     Map<String,Double> namesToCO2 = new HashMap<>();
     Query query = new Query("FoodItem");
     PreparedQuery results = datastore.prepare(query);
     for(Entity entity : results.asIterable()) {
        namesToCO2.put((String) entity.getProperty("Name"), (double)entity.getProperty("CO2"));
     }
-    if(namesToCO2.containsKey(FoodName)){
-      return namesToCO2.get(FoodName);
+    if(namesToCO2.containsKey(foodName)){
+      return namesToCO2.get(foodName);
     }
     return 0;
 

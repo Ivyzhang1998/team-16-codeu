@@ -18,3 +18,18 @@ indexes:
   - name: user
   - name: timestamp
     direction: desc
+
+- kind: FoodItem
+  properties:
+  - name: Name
+  - name: CO2
+    direction: desc
+
+- kind: EatenMeal
+  properties:
+  - name: Food
+  - name: UserId
+  - name: Amount
+  - name: MealType
+  - name: Date
+    direction: desc
