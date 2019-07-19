@@ -181,7 +181,7 @@ public class Datastore {
   }
 
   public double getCO2forOneUnitFood(String foodname){
-    Map<String,double> Names_to_CO2 = new HashMap<>();
+    Map<String,Double> Names_to_CO2 = new HashMap<>();
     Query query = new Query("FoodItem");
     PreparedQuery results = datastore.prepare(query);
     for(Entity entity : results.asIterable()) {
