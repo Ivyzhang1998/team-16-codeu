@@ -24,6 +24,7 @@ import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.codeu.data.EatenMeal;
+import com.google.codeu.data.EatenMeal.MealType;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
@@ -153,11 +154,10 @@ public class ChartsDataServlet extends HttpServlet{
 
 		for (Entity entity : queryResults.asIterable()) {
 			try {
-				String idString = entity.getKey().getName();
 				String food = (String) entity.getProperty("food");
 				double amount = (Double) entity.getProperty("amount");
 				String imageUrl = (String) entity.getProperty("imageUrl");
-				int mealType = (Integer) entity.getProperty("mealType");
+				MealType mealType = (MealType) entity.getProperty("mealType");
 				Date date = (Date) entity.getProperty("date");
 
 				EatenMeal meal = new EatenMeal(userId, food, amount, date, imageUrl, mealType);
@@ -179,7 +179,7 @@ public class ChartsDataServlet extends HttpServlet{
 	private List<FormattedMeal> formatValues(List<EatenMeal> meals) {
 		List<FormattedMeal> formattedMeals = new ArrayList<FormattedMeal>();
 		for(EatenMeal currMeal: meals) {
-			FormattedMeal newMeal = new FormattedMeal(currMeal.date, currMeal.getCO2());
+			FormattedMeal newMeal = new FormattedMeal(currMeal.getDate(), currMeal.getCO2());
 			formattedMeals.add(newMeal);
 		}
 		return formattedMeals;
