@@ -18,7 +18,7 @@ function drawLastSevenDaysChart(userId){
 
     fetch("/chartsdata", {
         method: 'post',
-        body: JSON.stringify(data);
+        body: JSON.stringify(data)
         })
         .then((response) => {
             return response.json();
@@ -55,7 +55,7 @@ function drawBreakdownChart(userId) {
 
     fetch("/chartsdata", {
         method: 'post',
-        body: JSON.stringify(data);
+        body: JSON.stringify(data)
         })
         .then((response) => {
             return response.json();
