@@ -190,7 +190,7 @@ public class Datastore {
     if(namesToCO2.containsKey(FoodName)){
       return namesToCO2.get(FoodName);
     }
-    return -1;
+    return 0;
 
   }
 
