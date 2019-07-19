@@ -15,7 +15,8 @@
     <body>
         <p>Log what you ate and then click submit!</p>
 
-        <form method="POST" enctype="multipart/form-data" action="<%= uploadUrl %>">
+        <form id="eatenFood" method="POST" enctype="multipart/form-data" action="<%= uploadUrl %>">
+            <input name="form-id" id="form-id" type="hidden" value="eaten">
             <label for="image">Upload an image:</label>
             <input type="file" name="image" id="image">
             <br/><br/>
