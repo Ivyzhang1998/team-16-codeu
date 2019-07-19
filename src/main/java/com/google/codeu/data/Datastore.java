@@ -55,7 +55,7 @@ public class Datastore {
 
   /** Stores Meal in Datastore. */
   public void storeMeal(EatenMeal meal) {
-    Entity mealEntity = new Entity("EatenMeak", meal.getID().toString());
+    Entity mealEntity = new Entity("EatenMeal", meal.getID().toString());
     mealEntity.setProperty("Food", meal.getFood());
     mealEntity.setProperty("UserId", meal.getUserId());
     mealEntity.setProperty("Amount", meal.getAmount());
