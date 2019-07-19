@@ -23,6 +23,7 @@ import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.codeu.data.EatenMeal;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
@@ -32,25 +33,14 @@ public class ChartsDataServlet extends HttpServlet{
 	private DatastoreService datastore;
 
 	/*
-	 * Class that models the JSON for our dummy data.
-	 * carbonFootprint will eventually be calculated from the map of FoodItems
-	 * For now, it is assigned a random value
+	 * Class that models the JSON for our data.
+	 * 
 	 * */
-	private static class EatenMeal {
-		private UUID id;
-		private List<String> foods;
-		private List<Double> amounts;
+	private static class FormattedMeal {
 		private Date date;
 		private double footprint;
-
-		private EatenMeal(UUID id, List<String> foods, List<Double> amounts, Date date) {
-			this.id = id;
-			this.foods = foods;
-			this.amounts = amounts;
-			this.date = date;
-		}
 		
-		private EatenMeal(Date date, double footprint) {
+		private FormattedMeal(Date date, double footprint) {
 			this.date = date;
 			this.footprint = footprint;
 		}
@@ -119,8 +109,8 @@ public class ChartsDataServlet extends HttpServlet{
 				.setFilter(new Query.CompositeFilter(Query.CompositeFilterOperator.AND, Arrays.asList(userFilter, mealTypeFilter)));
 		
 		PreparedQuery results = datastore.prepare(query);
-		List<EatenMeal> meals = this.processMealQuery(results);
-		List<EatenMeal> formattedMeals = this.formatValues(meals);
+		List<EatenMeal> meals = this.processMealQuery(results, user);
+		List<FormattedMeal> formattedMeals = this.formatValues(meals);
 		Gson gson = new Gson();
 		String JsonArray = gson.toJson(formattedMeals);
 		return JsonArray;
@@ -146,8 +136,8 @@ public class ChartsDataServlet extends HttpServlet{
 							.addSort("date", SortDirection.ASCENDING);
 
 		PreparedQuery results = datastore.prepare(query);
-		List<EatenMeal> meals = this.processMealQuery(results);
-		List<EatenMeal> formattedMeals = this.formatValues(meals);
+		List<EatenMeal> meals = this.processMealQuery(results, user);
+		List<FormattedMeal> formattedMeals = this.formatValues(meals);
 		Gson gson = new Gson();
 		String JsonResponse = gson.toJson(formattedMeals);
 		response.getOutputStream().println(JsonResponse);
@@ -158,18 +148,19 @@ public class ChartsDataServlet extends HttpServlet{
 	 *
 	 * @return a list of messages.
 	 */
-	private List<EatenMeal> processMealQuery(PreparedQuery queryResults) {
+	private List<EatenMeal> processMealQuery(PreparedQuery queryResults, String userId) {
 		List<EatenMeal> meals = new ArrayList<>();
 
 		for (Entity entity : queryResults.asIterable()) {
 			try {
 				String idString = entity.getKey().getName();
-				UUID id = UUID.fromString(idString);
-				List<String> foods = (List<String>) entity.getProperty("foods");
-				List<Double> amounts = (List<Double>) entity.getProperty("amounts");
+				String food = (String) entity.getProperty("food");
+				double amount = (Double) entity.getProperty("amount");
+				String imageUrl = (String) entity.getProperty("imageUrl");
+				int mealType = (Integer) entity.getProperty("mealType");
 				Date date = (Date) entity.getProperty("date");
 
-				EatenMeal meal = new EatenMeal(id, foods, amounts, date);
+				EatenMeal meal = new EatenMeal(userId, food, amount, date, imageUrl, mealType);
 				meals.add(meal);
 			} catch (Exception e) {
 				System.err.println("Error reading meal data.");
@@ -185,10 +176,10 @@ public class ChartsDataServlet extends HttpServlet{
 	 * Takes a list of EatenMeal entities and converts them to an object
 	 * with properties: Date, CarbonFootprint
 	 * */
-	private List<EatenMeal> formatValues(List<EatenMeal> meals) {
-		List<EatenMeal> formattedMeals = new ArrayList<EatenMeal>();
+	private List<FormattedMeal> formatValues(List<EatenMeal> meals) {
+		List<FormattedMeal> formattedMeals = new ArrayList<FormattedMeal>();
 		for(EatenMeal currMeal: meals) {
-			EatenMeal newMeal = new EatenMeal(currMeal.date, currMeal.getCO2());
+			FormattedMeal newMeal = new FormattedMeal(currMeal.date, currMeal.getCO2());
 			formattedMeals.add(newMeal);
 		}
 		return formattedMeals;
