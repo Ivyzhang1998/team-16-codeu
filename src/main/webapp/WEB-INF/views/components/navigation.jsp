@@ -6,7 +6,6 @@
 <div class="container">
   <nav>
       <header class="navbar">
-  
             <section class="navbar-section">
               <a href="/" class="navbar-brand mr-2"><strong>Carbon Mob</strong></a>
               <a href="/aboutus" class="btn btn-link">About</a>
@@ -24,10 +23,10 @@
                 </ul>
               </div>
             </section>
-  
-  
+
+
             <section class="navbar-section">
-  
+
               <%
               boolean isUserLoggedIn = (boolean) userService.isUserLoggedIn();
               if (isUserLoggedIn) {
@@ -38,7 +37,7 @@
               <% } else {   %>
               <a href="/login" class="btn btn-link">Login</a>
               <% } %>
-              
+
             </section>
       </header>
   </nav>

@@ -23,7 +23,7 @@ limitations under the License.
   </head>
   <body>
     <%@ include file="./components/navigation.jsp" %>
-    
+
     <div class="container">
         <h1>About Our Team</h1>
         <h2>Debbie Hahm</h2>
@@ -45,6 +45,6 @@ limitations under the License.
           <li>Ask me About: Basketball</li>
         </ul>
     </div>
-    
+
   </body>
 </html>

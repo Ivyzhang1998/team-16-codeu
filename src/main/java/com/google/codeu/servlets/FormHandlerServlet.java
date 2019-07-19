@@ -172,6 +172,11 @@ public class FormHandlerServlet extends HttpServlet {
         if (blobKey == null) {
             out.println("<p>You ate " + meal.getAmount() + " of "  + meal.getFood() +
                     " on " + format.format(meal.getDate()) + ".</p>");
+            if (meal.getCO2() == 0){
+               out.println("This Food is currently not in our Database. Feel free to add its CO2 information to our CO2 Data Form!");}
+            else{
+            out.println("<p> It produces " + meal.getCO2() + "kg" + " CO2 in total.</p>");
+            }
             return;
         }
 
@@ -194,6 +199,13 @@ public class FormHandlerServlet extends HttpServlet {
             out.println("<li>" + label.getDescription() + " " + label.getScore());
         }
         out.println("</ul>");
+
+        if (meal.getCO2() == 0){
+           out.println("This Food is currently not in our Database. Feel free to add its CO2 information to our CO2 Data Form!");}
+        else{
+        out.println("<p> It produces " + meal.getCO2() + "kg" + " CO2 in total.</p>");
+        }
+        return;
     }
 
     /**
