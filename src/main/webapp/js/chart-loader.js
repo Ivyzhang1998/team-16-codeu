@@ -1,13 +1,25 @@
-
-//Loads and initializes the Google Charts API, then calls drawChart()
-function initGoogleCharts() {
-    google.charts.load('current', {packages: ['corechart']});
-    google.charts.setOnLoadCallback(drawChart);
+// Fetch data and populate the UI of the page.
+function buildUI(userId) {
+    initGoogleCharts(userId);
 }
 
-//Sets up chart data in a DataTable, draws a chart on the page
-function drawChart(){
-    fetch("/chartsdata/week")
+//Loads and initializes the Google Charts API, then calls drawChart()
+function initGoogleCharts(userId) {
+    google.charts.load('current', {packages: ['corechart']});
+    google.charts.setOnLoadCallback(drawLastSevenDaysChart(userId));
+    google.charts.setOnLoadCallback(drawBreakdownChart(userId));
+}
+
+function drawLastSevenDaysChart(userId){
+    const data = {
+        user: userId,
+        analysisType: "lastSevenDays"
+    };
+
+    fetch("/chartsdata", {
+        method: 'post',
+        body: JSON.stringify(data);
+        })
         .then((response) => {
             return response.json();
         })
@@ -18,24 +30,58 @@ function drawChart(){
             chartData.addColumn("string", "Date");
             chartData.addColumn("number", "Carbon Footprint");
 
-            let dates = Object.keys(entries);
-            for(let i = 0; i < dates.length; i++) {
-                let entryRow = [dates[i], entries[dates[i]]];
+            for(date in entries) {
+                let entryRow = [date, entries[date]];
                 chartData.addRow(entryRow);
             }
 
             let options = {
                 "width" : 1200,
-                "height": 800
+                "height": 800,
+                curveType: 'function',
+                legend: { position: 'bottom' }
             };
         
-            let chart = new google.visualization.LineChart(document.getElementById("chart"));
+            let chart = new google.visualization.LineChart(document.getElementById("lastSevenDays"));
             chart.draw(chartData, options);
         });
 }
 
-// Fetch data and populate the UI of the page.
-function buildUI(userId) {
-    initGoogleCharts();
-}
+function drawBreakdownChart(userId) {
+    const data = {
+        user: userId,
+        analysisType: "breakdown"
+    };
 
+    fetch("/chartsdata", {
+        method: 'post',
+        body: JSON.stringify(data);
+        })
+        .then((response) => {
+            return response.json();
+        })
+        .then((entries) => {
+            let chartData = new google.visualization.DataTable();
+            
+            //Columns for DataTable instance
+            chartData.addColumn("string", "Category");
+            chartData.addColumn("number", "Carbon Footprint");
+
+            for(category in entries) {
+                for(let i = 0; i < entries[category].length; i++) {
+                    let entryRow = [category, entries[category][i]];
+                    chartData.addRow(entryRow);
+                }
+            }
+
+            let options = {
+                "width" : 1200,
+                "height": 800,
+                curveType: 'function',
+                legend: { position: 'bottom' }
+            };
+        
+            let chart = new google.visualization.AreaChart(document.getElementById("breakdown"));
+            chart.draw(chartData, options);
+        });
+}
