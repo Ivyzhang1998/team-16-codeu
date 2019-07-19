@@ -11,19 +11,24 @@
 <head>
     <meta charset="UTF-8">
     <title>Log a food</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/spectre.min.css"/>
+    <link rel="stylesheet" href="/css/spectre-icons.min.css"/>
+    <link rel="stylesheet" href="/css/spectre-exp.min.css"/>ç
 </head>
 <body>
-<p>Log what you ate and then click submit!</p>
+    <%@ include file="./components/navigation.jsp" %>
+    <p>Log what you ate and then click submit!</p>
 
-<form method="POST" enctype="multipart/form-data" action="<%= uploadUrl %>">
-    <input name="form-id" id="form-id" type="hidden" value="co2">
-    <label for="foodName">Food name:</label>
-    <input name="foodName" id="foodName" required>
-    <br/><br/>
-    <label for="co2">CO2/year:</label>
-    <input name="co2" id="co2" type="number" required>
-    <br/><br/>
-    <button>Submit</button>
-</form>
+    <form method="POST" enctype="multipart/form-data" action="<%= uploadUrl %>">
+        <input name="form-id" id="form-id" type="hidden" value="co2">
+        <label for="foodName">Food name:</label>
+        <input name="foodName" id="foodName" required>
+        <br/><br/>
+        <label for="co2">CO2/year:</label>
+        <input name="co2" id="co2" type="number" required>
+        <br/><br/>
+        <button>Submit</button>
+    </form>
 </body>
 </html>
