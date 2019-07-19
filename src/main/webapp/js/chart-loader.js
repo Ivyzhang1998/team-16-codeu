@@ -35,7 +35,7 @@ function drawChart(){
 }
 
 // Fetch data and populate the UI of the page.
-function buildUI() {
+function buildUI(userId) {
     initGoogleCharts();
 }
 
