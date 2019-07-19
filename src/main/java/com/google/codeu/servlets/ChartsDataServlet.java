@@ -106,7 +106,7 @@ public class ChartsDataServlet extends HttpServlet{
 		FilterPredicate userFilter = new Query.FilterPredicate("userId", Query.FilterOperator.EQUAL, user);
 		FilterPredicate mealTypeFilter = new Query.FilterPredicate("mealType", Query.FilterOperator.EQUAL, mealType);
 		
-		Query query = new Query("UserMeal")
+		Query query = new Query("EatenMeal")
 				.setFilter(new Query.CompositeFilter(Query.CompositeFilterOperator.AND, Arrays.asList(userFilter, mealTypeFilter)));
 		
 		PreparedQuery results = datastore.prepare(query);
@@ -132,9 +132,9 @@ public class ChartsDataServlet extends HttpServlet{
 		FilterPredicate dateFilter = new Query.FilterPredicate("date", Query.FilterOperator.GREATER_THAN, sevenDaysAgo);
 		FilterPredicate userFilter = new Query.FilterPredicate("userId", Query.FilterOperator.EQUAL, user);
 		
-		Query query = new Query("UserMeal")
-							.setFilter(new Query.CompositeFilter(Query.CompositeFilterOperator.AND, Arrays.asList(dateFilter, userFilter)))
-							.addSort("date", SortDirection.ASCENDING);
+		Query query = new Query("EatenMeal")
+						.setFilter(new Query.CompositeFilter(Query.CompositeFilterOperator.AND, Arrays.asList(dateFilter, userFilter)))
+						.addSort("date", SortDirection.ASCENDING);
 
 		PreparedQuery results = datastore.prepare(query);
 		List<EatenMeal> meals = this.processMealQuery(results, user);
