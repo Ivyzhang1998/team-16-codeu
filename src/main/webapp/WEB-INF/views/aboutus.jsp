@@ -17,6 +17,9 @@ limitations under the License.
     <meta charset="UTF-8">
     <title>About Us</title>
     <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/spectre.min.css"/>
+    <link rel="stylesheet" href="/css/spectre-icons.min.css"/>
+    <link rel="stylesheet" href="/css/spectre-exp.min.css"/>
   </head>
   <body>
     <%@ include file="./components/navigation.jsp" %>
