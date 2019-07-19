@@ -22,6 +22,7 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
+import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
@@ -35,17 +36,23 @@ public class ChartsDataServlet extends HttpServlet{
 	 * carbonFootprint will eventually be calculated from the map of FoodItems
 	 * For now, it is assigned a random value
 	 * */
-	private static class UserMeal {
+	private static class EatenMeal {
 		private UUID id;
 		private List<String> foods;
 		private List<Double> amounts;
 		private Date date;
+		private double footprint;
 
-		private UserMeal(UUID id, List<String> foods, List<Double> amounts, Date date) {
+		private EatenMeal(UUID id, List<String> foods, List<Double> amounts, Date date) {
 			this.id = id;
 			this.foods = foods;
 			this.amounts = amounts;
 			this.date = date;
+		}
+		
+		private EatenMeal(Date date, double footprint) {
+			this.date = date;
+			this.footprint = footprint;
 		}
 	}
 	
@@ -112,9 +119,10 @@ public class ChartsDataServlet extends HttpServlet{
 				.setFilter(new Query.CompositeFilter(Query.CompositeFilterOperator.AND, Arrays.asList(userFilter, mealTypeFilter)));
 		
 		PreparedQuery results = datastore.prepare(query);
-		List<UserMeal> meals = this.processMealQuery(results);
+		List<EatenMeal> meals = this.processMealQuery(results);
+		List<EatenMeal> formattedMeals = this.formatValues(meals);
 		Gson gson = new Gson();
-		String JsonArray = gson.toJson(meals);
+		String JsonArray = gson.toJson(formattedMeals);
 		return JsonArray;
 	}
 
@@ -134,12 +142,14 @@ public class ChartsDataServlet extends HttpServlet{
 		FilterPredicate userFilter = new Query.FilterPredicate("userId", Query.FilterOperator.EQUAL, user);
 		
 		Query query = new Query("UserMeal")
-							.setFilter(new Query.CompositeFilter(Query.CompositeFilterOperator.AND, Arrays.asList(dateFilter, userFilter)));
+							.setFilter(new Query.CompositeFilter(Query.CompositeFilterOperator.AND, Arrays.asList(dateFilter, userFilter)))
+							.addSort("date", SortDirection.ASCENDING);
 
 		PreparedQuery results = datastore.prepare(query);
-		List<UserMeal> meals = this.processMealQuery(results);
+		List<EatenMeal> meals = this.processMealQuery(results);
+		List<EatenMeal> formattedMeals = this.formatValues(meals);
 		Gson gson = new Gson();
-		String JsonResponse = gson.toJson(meals);
+		String JsonResponse = gson.toJson(formattedMeals);
 		response.getOutputStream().println(JsonResponse);
 	}
 	
@@ -148,8 +158,8 @@ public class ChartsDataServlet extends HttpServlet{
 	 *
 	 * @return a list of messages.
 	 */
-	private List<UserMeal> processMealQuery(PreparedQuery queryResults) {
-		List<UserMeal> meals = new ArrayList<>();
+	private List<EatenMeal> processMealQuery(PreparedQuery queryResults) {
+		List<EatenMeal> meals = new ArrayList<>();
 
 		for (Entity entity : queryResults.asIterable()) {
 			try {
@@ -159,15 +169,28 @@ public class ChartsDataServlet extends HttpServlet{
 				List<Double> amounts = (List<Double>) entity.getProperty("amounts");
 				Date date = (Date) entity.getProperty("date");
 
-				UserMeal meal = new UserMeal(id, foods, amounts, date);
+				EatenMeal meal = new EatenMeal(id, foods, amounts, date);
 				meals.add(meal);
 			} catch (Exception e) {
-				System.err.println("Error reading message.");
+				System.err.println("Error reading meal data.");
 				System.err.println(entity.toString());
 				e.printStackTrace();
 			}
 		}
 
 		return meals;
+	}
+	
+	/*
+	 * Takes a list of EatenMeal entities and converts them to an object
+	 * with properties: Date, CarbonFootprint
+	 * */
+	private List<EatenMeal> formatValues(List<EatenMeal> meals) {
+		List<EatenMeal> formattedMeals = new ArrayList<EatenMeal>();
+		for(EatenMeal currMeal: meals) {
+			EatenMeal newMeal = new EatenMeal(currMeal.date, currMeal.getCO2());
+			formattedMeals.add(newMeal);
+		}
+		return formattedMeals;
 	}
 }
