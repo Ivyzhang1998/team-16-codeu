@@ -1,3 +1,7 @@
+<%@ page import="com.google.appengine.api.users.UserService" %>
+<%@ page import="com.google.appengine.api.users.UserServiceFactory" %>
+<% String userId = UserServiceFactory.getUserService().getCurrentUser().getUserId(); %>
+
 <!DOCTYPE html>
 <html>
 
@@ -13,14 +17,15 @@
         <script type="text/javascript" src="/js/chart-loader.js"></script>
     </head>
 
-    <body onload="buildUI();">
+    <body onload="buildUI(<%= userId %>);">
         <%@ include file="./components/navigation.jsp" %>
 
         <div class="container">
             <h1 id="page-title">Chart Page</h1>
 
-            <div id="chart"></div>
-        </div>
+        <div id="lastSevenDays"></div>
+
+        <div id="breakdown"></div>
 
     </body>
 
