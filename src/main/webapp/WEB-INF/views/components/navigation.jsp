@@ -12,7 +12,15 @@
             <a href="/feed" class="btn btn-link">Public Feed</a>
             <a href="/stats" class="btn btn-link">Stats</a>
             <a href="/charts" class="btn btn-link">Charts</a>
-            <a href="/map" class="btn btn-link">map</a>
+            <div class="dropdown">
+              <a href="#" class="btn btn-link dropdown-toggle">Forms</a>
+              <ul class="menu">
+                <li class="menu-item">
+                  <a href="/eaten-food-form" class="btn btn-link">Meal Form</a>
+                  <a href="/co2-food-form" class="btn btn-link">CO2 Data Form</a>
+                </li>
+              </ul>
+            </div>
 
             <%
             boolean isUserLoggedIn = (boolean) userService.isUserLoggedIn();
