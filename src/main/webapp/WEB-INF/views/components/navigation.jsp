@@ -5,7 +5,6 @@
 
 <nav>
     <header class="navbar">
-
         <section class="navbar-section">
             <a href="/" class="navbar-brand mr-2">Team 16</a>
             <a href="/aboutus" class="btn btn-link">About</a>
