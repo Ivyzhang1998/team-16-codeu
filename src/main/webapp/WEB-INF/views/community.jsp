@@ -2,11 +2,10 @@
 <html>
   <head>
     <title>Community Page</title>
-    <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/spectre.min.css"/>
     <link rel="stylesheet" href="/css/spectre-icons.min.css"/>
     <link rel="stylesheet" href="/css/spectre-exp.min.css"/>
-
+    <link rel="stylesheet" href="/css/main.css">
     <script>
 
       /** Fetches users and adds them to the page. */
@@ -47,10 +46,13 @@
     <div id="content">
       <%@ include file="./components/navigation.jsp" %>
       
-      <h1>Community Page</h1>
-      <p>Here is a list of every user who has posted a message:</p>
-      <hr/>
-      <ul id="userlist">Loading...</ul>
+      <div class="container">
+          <h1>Community Page</h1>
+          <p>Here is a list of every user who has posted a message:</p>
+          <hr/>
+          <ul id="userlist">Loading...</ul>
+      </div>
+
     </div>
   </body>
 </html>

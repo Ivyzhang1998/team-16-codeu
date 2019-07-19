@@ -5,10 +5,10 @@
   <head>
     <meta charset="UTF-8"/>
     <title>FoodO2</title>
-    <link rel="stylesheet" href="/css/main.css"/>
     <link rel="stylesheet" href="/css/spectre.min.css"/>
     <link rel="stylesheet" href="/css/spectre-icons.min.css"/>
     <link rel="stylesheet" href="/css/spectre-exp.min.css"/>
+    <link rel="stylesheet" href="/css/main.css"/>
   </head>
 
   <body>

@@ -16,22 +16,10 @@
 
 /* Prevent the page from becoming too wide. */
 body {
-  max-width: 600px;
+  width: 100%;
 }
 
-/* Remove bullet points from navigation bar. */
-nav ul {
-  list-style-type: none;
-  padding-left: 0;
-}
-
-/* Keep navigation menu on one line. */
-nav li {
-  display: inline-block;
-  margin-right: 10px
-}
-
-.map{
-  width: 500px;
-  height: 500px;
+.container {
+  width: 60%;
+  margin: 0 auto;
 }
