@@ -25,10 +25,10 @@
                 </div>
             </div>
 
-            <p>Welcome! This is our FoodCO2 APP, where you can calculate the carbon foodprint of your diet
-      and keep track of how much greenhouse gas emission you contribute through your food consumption.
-      Overall, we hope that this APP can raise awarenss about the environmental impact of different food choices and encourage
-      low-carbon dietary style for the sake of our lovely planet!</p>
+            <p>Welcome! This is our FoodCO2 APP, where you can calculate the carbon footprint of your diet
+      and keep track of how much greenhouse gas emissions you contribute through your consumption.
+      Overall, we hope that this APP will raise awarenss about the environmental impact of different food choices and encourage
+      low-carbon diet for the sake of our lovely planet!</p>
 
         </div>
 
