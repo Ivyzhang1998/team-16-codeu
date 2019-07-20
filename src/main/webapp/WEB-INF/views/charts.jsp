@@ -17,7 +17,7 @@
         <script type="text/javascript" src="/js/chart-loader.js"></script>
     </head>
 
-    <body onload="buildUI(<%= userId %>);">
+    <body onload="buildUI('<%= userId %>');">
         <%@ include file="./components/navigation.jsp" %>
 
         <div class="container">
@@ -30,4 +30,3 @@
     </body>
 
 </html>
-

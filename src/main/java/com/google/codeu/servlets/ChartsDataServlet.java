@@ -137,11 +137,8 @@ public class ChartsDataServlet extends HttpServlet{
 						.addSort("Date", SortDirection.ASCENDING);
 
 		PreparedQuery results = datastore.prepare(query);
-		System.out.println(results);
 		List<EatenMeal> meals = this.processMealQuery(results, user);
-		System.out.println(meals);
 		List<FormattedMeal> formattedMeals = this.formatValues(meals);
-		System.out.println(formattedMeals);
 		Gson gson = new Gson();
 		String JsonResponse = gson.toJson(formattedMeals);
 		response.getOutputStream().println(JsonResponse);
@@ -162,7 +159,6 @@ public class ChartsDataServlet extends HttpServlet{
 				String imageUrl = "";
 				MealType mealType = MealType.values()[(int)(long) entity.getProperty("MealType")];
 				Date date = (Date) entity.getProperty("Date");
-				System.out.println(entity.getProperty("UserId"));
 				EatenMeal meal = new EatenMeal(userId, food, amount, date, imageUrl, mealType);
 				meals.add(meal);
 			} catch (Exception e) {

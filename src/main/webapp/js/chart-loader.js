@@ -1,7 +1,3 @@
-// Fetch data and populate the UI of the page.
-function buildUI(userId) {
-    initGoogleCharts(userId);
-}
 
 function drawLastSevenDaysChart(userId){
     
@@ -23,10 +19,10 @@ function drawLastSevenDaysChart(userId){
             chartData.addColumn("string", "Date");
             chartData.addColumn("number", "Carbon Footprint");
 
-            for(date in entries) {
-                let entryRow = [date, entries[date]];
+            entries.forEach((entry) => {
+                let entryRow = [entry.date, entry.footprint];
                 chartData.addRow(entryRow);
-            }
+            });
 
             let options = {
                 "width" : 1200,
