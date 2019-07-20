@@ -38,8 +38,8 @@ public class ChartsDataServlet extends HttpServlet{
 	 * 
 	 * */
 	private static class FormattedMeal {
-		private Date date;
-		private double footprint;
+		public Date date;
+		public double footprint;
 		
 		private FormattedMeal(Date date, double footprint) {
 			this.date = date;
@@ -99,10 +99,10 @@ public class ChartsDataServlet extends HttpServlet{
 	/*
 	 * 
 	 * Queries the datastore for meals by mealType: breakfast, lunch, dinner, or snack
-	 * Returns the string representation of the JSON array
+	 * Returns the carbon footprint of all entries combined in that meal category
 	 * 
 	 * */
-	private List<FormattedMeal> categoryQuery(String user, int mealType) {
+	private Double categoryQuery(String user, int mealType) {
 		FilterPredicate userFilter = new Query.FilterPredicate("UserId", Query.FilterOperator.EQUAL, user);
 		FilterPredicate mealTypeFilter = new Query.FilterPredicate("MealType", Query.FilterOperator.EQUAL, mealType);
 		
@@ -112,7 +112,11 @@ public class ChartsDataServlet extends HttpServlet{
 		PreparedQuery results = datastore.prepare(query);
 		List<EatenMeal> meals = this.processMealQuery(results, user);
 		List<FormattedMeal> formattedMeals = this.formatValues(meals);
-		return formattedMeals;
+		double footprint = 0;
+		for(FormattedMeal meal: formattedMeals) {
+			footprint += meal.footprint;
+		}
+		return footprint;
 	}
 
 	/*
