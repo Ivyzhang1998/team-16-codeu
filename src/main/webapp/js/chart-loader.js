@@ -1,5 +1,7 @@
 
-function drawLastSevenDaysChart(userId){
+var userId;
+
+function drawLastSevenDaysChart(){
     
     const resourceLink = `/chartsdata?user=${userId}&analysisType=lastSevenDays`;
 
@@ -11,17 +13,17 @@ function drawLastSevenDaysChart(userId){
             return response.json();
         })
         .then((entries) => {
-            let chartData = new google.visualization.DataTable();
+            var sevenDaysChartData = new google.visualization.DataTable();
 
             console.log(entries);
             
             //Columns for DataTable instance
-            chartData.addColumn("string", "Date");
-            chartData.addColumn("number", "Carbon Footprint");
+            sevenDaysChartData.addColumn("string", "Date");
+            sevenDaysChartData.addColumn("number", "Carbon Footprint");
 
             entries.forEach((entry) => {
                 let entryRow = [entry.date, entry.footprint];
-                chartData.addRow(entryRow);
+                sevenDaysChartData.addRow(entryRow);
             });
 
             let options = {
@@ -32,11 +34,11 @@ function drawLastSevenDaysChart(userId){
             };
         
             let chart = new google.visualization.LineChart(document.getElementById("lastSevenDays"));
-            chart.draw(chartData, options);
+            chart.draw(sevenDaysChartData, options);
         });
 }
 
-function drawBreakdownChart(userId) {
+function drawBreakdownChart() {
     
     const resourceLink = `/chartsdata?user=${userId}&analysisType=breakdown`;
 
@@ -48,16 +50,21 @@ function drawBreakdownChart(userId) {
             return response.json();
         })
         .then((entries) => {
-            let chartData = new google.visualization.DataTable();   
+            var breakdownChartData = new google.visualization.DataTable();   
             
-            //Columns for DataTable instance
-            chartData.addColumn("string", "Category");
-            chartData.addColumn("number", "Carbon Footprint");
+             // [ "Date", "breakfast", "lunch", "dinner", "snack"]
+             // [ "July 20",    150,        75,       30,      89]
+            breakdownChartData.addColumn("string", "Date");
 
             for(category in entries) {
+
+                breakdownChartData.addColumn("string", category);
+
                 for(let i = 0; i < entries[category].length; i++) {
-                    let entryRow = [category, entries[category][i]];
-                    chartData.addRow(entryRow);
+                    let entry = entries[category][i];
+                    let entryRow = [entry.date, category, entry.footprint];
+                    console.log(entryRow);
+                    breakdownChartData.addRow(entryRow);
                 }
             }
 
@@ -69,19 +76,15 @@ function drawBreakdownChart(userId) {
             };
         
             let chart = new google.visualization.AreaChart(document.getElementById("breakdown"));
-            chart.draw(chartData, options);
+            chart.draw(breakdownChartData, options);
         });
 }
 
-//Loads and initializes the Google Charts API, then calls drawChart()
-function initGoogleCharts(userId) {
-    google.charts.load('current', {'packages':['corechart']});
-    google.charts.setOnLoadCallback(drawLastSevenDaysChart(userId));
-    //google.charts.setOnLoadCallback(drawBreakdownChart(userId));
-}
 
 // Fetch data and populate the UI of the page.
-function buildUI(userId) {
-    console.log(userId);
-    initGoogleCharts(userId);
+function buildUI(id) {
+    userId = id;
+    google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(drawLastSevenDaysChart);
+    google.charts.setOnLoadCallback(drawBreakdownChart);
 }

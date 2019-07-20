@@ -48,8 +48,7 @@ public class ChartsDataServlet extends HttpServlet{
 	}
 	
 	/*
-	 * Generates Dummy data to be sent in GET requests
-	 * TODO: Connect this servlet with FoodItems and UserMeals in the Datastore.
+	 * Initializes Datastore
 	 * */
 	@Override
 	public void init() {
@@ -86,12 +85,13 @@ public class ChartsDataServlet extends HttpServlet{
 	private void getBreakdown(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		response.setContentType("application/json");
 		String user = request.getParameter("user");
-		
+		Gson gson = new Gson();
 		JsonObject json = new JsonObject();
-		json.addProperty("breakfast", this.categoryQuery(user, 0));
-		json.addProperty("lunch", this.categoryQuery(user, 1));
-		json.addProperty("dinner", this.categoryQuery(user, 2));
-		json.addProperty("snack", this.categoryQuery(user, 3));
+
+		json.add("breakfast", gson.toJsonTree(this.categoryQuery(user, 0)));
+		json.add("lunch", gson.toJsonTree(this.categoryQuery(user, 1)));
+		json.add("dinner", gson.toJsonTree(this.categoryQuery(user, 2)));
+		json.add("snack", gson.toJsonTree(this.categoryQuery(user, 3)));
 		
 		response.getOutputStream().println(json.toString());
 	}
@@ -102,9 +102,9 @@ public class ChartsDataServlet extends HttpServlet{
 	 * Returns the string representation of the JSON array
 	 * 
 	 * */
-	private String categoryQuery(String user, int mealType) {
-		FilterPredicate userFilter = new Query.FilterPredicate("userId", Query.FilterOperator.EQUAL, user);
-		FilterPredicate mealTypeFilter = new Query.FilterPredicate("mealType", Query.FilterOperator.EQUAL, mealType);
+	private List<FormattedMeal> categoryQuery(String user, int mealType) {
+		FilterPredicate userFilter = new Query.FilterPredicate("UserId", Query.FilterOperator.EQUAL, user);
+		FilterPredicate mealTypeFilter = new Query.FilterPredicate("MealType", Query.FilterOperator.EQUAL, mealType);
 		
 		Query query = new Query("EatenMeal")
 				.setFilter(new Query.CompositeFilter(Query.CompositeFilterOperator.AND, Arrays.asList(userFilter, mealTypeFilter)));
@@ -112,9 +112,7 @@ public class ChartsDataServlet extends HttpServlet{
 		PreparedQuery results = datastore.prepare(query);
 		List<EatenMeal> meals = this.processMealQuery(results, user);
 		List<FormattedMeal> formattedMeals = this.formatValues(meals);
-		Gson gson = new Gson();
-		String JsonArray = gson.toJson(formattedMeals);
-		return JsonArray;
+		return formattedMeals;
 	}
 
 	/*
@@ -145,9 +143,9 @@ public class ChartsDataServlet extends HttpServlet{
 	}
 	
 	/*
-	 * Iterates through query results and returns a list of messages
+	 * Iterates through query results and returns a list of meals
 	 *
-	 * @return a list of messages.
+	 * @return a list of meals.
 	 */
 	private List<EatenMeal> processMealQuery(PreparedQuery queryResults, String userId) {
 		List<EatenMeal> meals = new ArrayList<>();
