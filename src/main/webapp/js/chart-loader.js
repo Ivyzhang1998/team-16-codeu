@@ -9,26 +9,21 @@ function drawLastSevenDaysChart(){
         method: 'post'
         })
         .then((response) => {
-            console.log(response);
             return response.json();
         })
         .then((entries) => {
             var sevenDaysChartData = new google.visualization.DataTable();
 
-            console.log(entries);
-            
             //Columns for DataTable instance
             sevenDaysChartData.addColumn("string", "Date");
             sevenDaysChartData.addColumn("number", "Carbon Footprint");
 
             entries.forEach((entry) => {
-                let entryRow = [entry.date, entry.footprint];
+                let entryRow = [entry.date.slice(0, -18), entry.footprint];
                 sevenDaysChartData.addRow(entryRow);
             });
 
             let options = {
-                "width" : 1200,
-                "height": 800,
                 curveType: 'function',
                 legend: { position: 'bottom' }
             };
@@ -46,7 +41,6 @@ function drawBreakdownChart() {
         method: 'post'
         })
         .then((response) => {
-            console.log(response);
             return response.json();
         })
         .then((entries) => {
@@ -60,15 +54,15 @@ function drawBreakdownChart() {
 
             for(category in entries) {
                 let entryRow = [category, entries[category]];
-                console.log(entryRow);
                 breakdownChartData.addRow(entryRow);
             }
 
             let options = {
-                title: 'Breakdown by Meal Type',
                 pieHole: 0.4,
-                "width" : 1200,
-                "height": 800
+                legend: {
+                    alignment: 'center',
+                    position: 'top'
+                }
             };
         
             let chart = new google.visualization.PieChart(document.getElementById("breakdown"));

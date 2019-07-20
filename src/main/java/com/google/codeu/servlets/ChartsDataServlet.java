@@ -3,12 +3,10 @@ package com.google.codeu.servlets;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -80,7 +78,7 @@ public class ChartsDataServlet extends HttpServlet{
 	
 	/*
 	 * Returns JSON response of UserMeals by category: breakfast, lunch, dinner, and snack
-	 * Example response: { "breakfast": [meal1, meal2], "lunch": [meal1, meal2] };
+	 * Example response: { "breakfast": 40.2, "lunch": 69.8 };
 	 * */
 	private void getBreakdown(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		response.setContentType("application/json");
@@ -129,13 +127,13 @@ public class ChartsDataServlet extends HttpServlet{
 		//Get date from 7 days ago
 		Instant now = Instant.now();
 		Instant before = now.minus(Duration.ofDays(7));
-		Date sevenDaysAgo = new Date(before.toEpochMilli());
+		Date sevenDaysAgo = Date.from(before);
 		
 		FilterPredicate dateFilter = new Query.FilterPredicate("Date", Query.FilterOperator.GREATER_THAN, sevenDaysAgo);
 		FilterPredicate userFilter = new Query.FilterPredicate("UserId", Query.FilterOperator.EQUAL, user);
 		
 		Query query = new Query("EatenMeal")
-						.setFilter(new Query.CompositeFilter(Query.CompositeFilterOperator.AND, Arrays.asList(userFilter, dateFilter)))
+						.setFilter(new Query.CompositeFilter(Query.CompositeFilterOperator.AND, Arrays.asList(dateFilter, userFilter)))
 						.addSort("Date", SortDirection.ASCENDING);
 
 		PreparedQuery results = datastore.prepare(query);
