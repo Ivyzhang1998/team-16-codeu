@@ -127,18 +127,21 @@ public class ChartsDataServlet extends HttpServlet{
 		//Get date from 7 days ago
 		Instant now = Instant.now();
 		Instant before = now.minus(Duration.ofDays(7));
-		Date sevenDaysAgo = Date.from(before);
+		Date sevenDaysAgo = new Date(before.toEpochMilli());
 		
-		FilterPredicate dateFilter = new Query.FilterPredicate("date", Query.FilterOperator.GREATER_THAN, sevenDaysAgo);
-		FilterPredicate userFilter = new Query.FilterPredicate("userId", Query.FilterOperator.EQUAL, user);
+		FilterPredicate dateFilter = new Query.FilterPredicate("Date", Query.FilterOperator.GREATER_THAN, sevenDaysAgo);
+		FilterPredicate userFilter = new Query.FilterPredicate("UserId", Query.FilterOperator.EQUAL, user);
 		
 		Query query = new Query("EatenMeal")
-						.setFilter(new Query.CompositeFilter(Query.CompositeFilterOperator.AND, Arrays.asList(dateFilter, userFilter)))
-						.addSort("date", SortDirection.ASCENDING);
+						.setFilter(new Query.CompositeFilter(Query.CompositeFilterOperator.AND, Arrays.asList(userFilter, dateFilter)))
+						.addSort("Date", SortDirection.ASCENDING);
 
 		PreparedQuery results = datastore.prepare(query);
+		System.out.println(results);
 		List<EatenMeal> meals = this.processMealQuery(results, user);
+		System.out.println(meals);
 		List<FormattedMeal> formattedMeals = this.formatValues(meals);
+		System.out.println(formattedMeals);
 		Gson gson = new Gson();
 		String JsonResponse = gson.toJson(formattedMeals);
 		response.getOutputStream().println(JsonResponse);
@@ -154,12 +157,12 @@ public class ChartsDataServlet extends HttpServlet{
 
 		for (Entity entity : queryResults.asIterable()) {
 			try {
-				String food = (String) entity.getProperty("food");
-				double amount = (Double) entity.getProperty("amount");
-				String imageUrl = (String) entity.getProperty("imageUrl");
-				MealType mealType = (MealType) entity.getProperty("mealType");
-				Date date = (Date) entity.getProperty("date");
-
+				String food = (String) entity.getProperty("Food");
+				double amount = (Double) entity.getProperty("Amount");
+				String imageUrl = "";
+				MealType mealType = MealType.values()[(int)(long) entity.getProperty("MealType")];
+				Date date = (Date) entity.getProperty("Date");
+				System.out.println(entity.getProperty("UserId"));
 				EatenMeal meal = new EatenMeal(userId, food, amount, date, imageUrl, mealType);
 				meals.add(meal);
 			} catch (Exception e) {

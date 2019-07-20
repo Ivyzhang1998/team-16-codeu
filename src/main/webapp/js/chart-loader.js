@@ -1,30 +1,19 @@
-// Fetch data and populate the UI of the page.
-function buildUI(userId) {
-    initGoogleCharts(userId);
-}
-
-//Loads and initializes the Google Charts API, then calls drawChart()
-function initGoogleCharts(userId) {
-    google.charts.load('current', {packages: ['corechart']});
-    google.charts.setOnLoadCallback(drawLastSevenDaysChart(userId));
-    google.charts.setOnLoadCallback(drawBreakdownChart(userId));
-}
 
 function drawLastSevenDaysChart(userId){
-    const data = {
-        user: userId,
-        analysisType: "lastSevenDays"
-    };
+    
+    const resourceLink = `/chartsdata?user=${userId}&analysisType=lastSevenDays`;
 
-    fetch("/chartsdata", {
-        method: 'post',
-        body: JSON.stringify(data)
+    fetch(resourceLink, {
+        method: 'post'
         })
         .then((response) => {
+            console.log(response);
             return response.json();
         })
         .then((entries) => {
             let chartData = new google.visualization.DataTable();
+
+            console.log(entries);
             
             //Columns for DataTable instance
             chartData.addColumn("string", "Date");
@@ -48,20 +37,18 @@ function drawLastSevenDaysChart(userId){
 }
 
 function drawBreakdownChart(userId) {
-    const data = {
-        user: userId,
-        analysisType: "breakdown"
-    };
+    
+    const resourceLink = `/chartsdata?user=${userId}&analysisType=breakdown`;
 
-    fetch("/chartsdata", {
-        method: 'post',
-        body: JSON.stringify(data)
+    fetch(resourceLink, {
+        method: 'post'
         })
         .then((response) => {
+            console.log(response);
             return response.json();
         })
         .then((entries) => {
-            let chartData = new google.visualization.DataTable();
+            let chartData = new google.visualization.DataTable();   
             
             //Columns for DataTable instance
             chartData.addColumn("string", "Category");
@@ -84,4 +71,17 @@ function drawBreakdownChart(userId) {
             let chart = new google.visualization.AreaChart(document.getElementById("breakdown"));
             chart.draw(chartData, options);
         });
+}
+
+//Loads and initializes the Google Charts API, then calls drawChart()
+function initGoogleCharts(userId) {
+    google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(drawLastSevenDaysChart(userId));
+    //google.charts.setOnLoadCallback(drawBreakdownChart(userId));
+}
+
+// Fetch data and populate the UI of the page.
+function buildUI(userId) {
+    console.log(userId);
+    initGoogleCharts(userId);
 }
