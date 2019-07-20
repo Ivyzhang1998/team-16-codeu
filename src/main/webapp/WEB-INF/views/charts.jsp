@@ -1,6 +1,6 @@
 <%@ page import="com.google.appengine.api.users.UserService" %>
 <%@ page import="com.google.appengine.api.users.UserServiceFactory" %>
-<% String userId = UserServiceFactory.getUserService().getCurrentUser().getUserId();  System.out.println(userId);%>
+<% String userId = UserServiceFactory.getUserService().getCurrentUser().getUserId();%>
 
 <!DOCTYPE html>
 <html>
