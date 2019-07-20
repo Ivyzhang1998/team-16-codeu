@@ -6,6 +6,13 @@
     <link rel="stylesheet" href="/css/spectre-icons.min.css"/>
     <link rel="stylesheet" href="/css/spectre-exp.min.css"/>
     <link rel="stylesheet" href="/css/main.css">
+<<<<<<< Updated upstream
+=======
+    <link rel="stylesheet" href="/css/spectre.min.css"/>
+    <link rel="stylesheet" href="/css/spectre-icons.min.css"/>
+    <link rel="stylesheet" href="/css/spectre-exp.min.css"/>
+
+>>>>>>> Stashed changes
     <script>
 
       /** Fetches users and adds them to the page. */

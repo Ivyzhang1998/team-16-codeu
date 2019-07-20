@@ -6,6 +6,9 @@
     <link rel="stylesheet" href="/css/spectre-icons.min.css"/>
     <link rel="stylesheet" href="/css/spectre-exp.min.css"/>
     <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/spectre.min.css"/>
+    <link rel="stylesheet" href="/css/spectre-icons.min.css"/>
+    <link rel="stylesheet" href="/css/spectre-exp.min.css"/>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAIJxmuluUxbW2r2rZgOebw7B0U1rRtrvA"></script>
     <script src="/js/map-loader.js"></script>
   </head>

@@ -8,7 +8,10 @@
         <link rel="stylesheet" href="/css/spectre.min.css"/>
         <link rel="stylesheet" href="/css/spectre-icons.min.css"/>
         <link rel="stylesheet" href="/css/spectre-exp.min.css"/>
+<<<<<<< Updated upstream
         <link rel="stylesheet" href="/css/main.css">
+=======
+>>>>>>> Stashed changes
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
         <script type="text/javascript" src="/js/chart-loader.js"></script>
     </head>
