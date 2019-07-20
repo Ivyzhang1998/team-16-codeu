@@ -88,10 +88,10 @@ public class ChartsDataServlet extends HttpServlet{
 		Gson gson = new Gson();
 		JsonObject json = new JsonObject();
 
-		json.add("breakfast", gson.toJsonTree(this.categoryQuery(user, 0)));
-		json.add("lunch", gson.toJsonTree(this.categoryQuery(user, 1)));
-		json.add("dinner", gson.toJsonTree(this.categoryQuery(user, 2)));
-		json.add("snack", gson.toJsonTree(this.categoryQuery(user, 3)));
+		json.add("Breakfast", gson.toJsonTree(this.categoryQuery(user, 0)));
+		json.add("Lunch", gson.toJsonTree(this.categoryQuery(user, 1)));
+		json.add("Dinner", gson.toJsonTree(this.categoryQuery(user, 2)));
+		json.add("Snack", gson.toJsonTree(this.categoryQuery(user, 3)));
 		
 		response.getOutputStream().println(json.toString());
 	}

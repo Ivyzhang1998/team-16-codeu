@@ -52,30 +52,26 @@ function drawBreakdownChart() {
         .then((entries) => {
             var breakdownChartData = new google.visualization.DataTable();   
             
-             // [ "Date", "breakfast", "lunch", "dinner", "snack"]
-             // [ "July 20",    150,        75,       30,      89]
-            breakdownChartData.addColumn("string", "Date");
+             // [ "Meal Type", "Total Footprint"]
+             // [ "Breakfast",  "2006607"]
+             // [ "Lunch",  "46576756567"]
+            breakdownChartData.addColumn("string", "Meal Type");
+            breakdownChartData.addColumn("number", "Total Carbon Footprint");
 
             for(category in entries) {
-
-                breakdownChartData.addColumn("string", category);
-
-                for(let i = 0; i < entries[category].length; i++) {
-                    let entry = entries[category][i];
-                    let entryRow = [entry.date, category, entry.footprint];
-                    console.log(entryRow);
-                    breakdownChartData.addRow(entryRow);
-                }
+                let entryRow = [category, entries[category]];
+                console.log(entryRow);
+                breakdownChartData.addRow(entryRow);
             }
 
             let options = {
+                title: 'Breakdown by Meal Type',
+                pieHole: 0.4,
                 "width" : 1200,
-                "height": 800,
-                curveType: 'function',
-                legend: { position: 'bottom' }
+                "height": 800
             };
         
-            let chart = new google.visualization.AreaChart(document.getElementById("breakdown"));
+            let chart = new google.visualization.PieChart(document.getElementById("breakdown"));
             chart.draw(breakdownChartData, options);
         });
 }
