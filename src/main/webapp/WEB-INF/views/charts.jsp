@@ -1,3 +1,7 @@
+<%@ page import="com.google.appengine.api.users.UserService" %>
+<%@ page import="com.google.appengine.api.users.UserServiceFactory" %>
+<% String userId = UserServiceFactory.getUserService().getCurrentUser().getUserId();%>
+
 <!DOCTYPE html>
 <html>
 
@@ -13,16 +17,28 @@
         <script type="text/javascript" src="/js/chart-loader.js"></script>
     </head>
 
-    <body onload="buildUI();">
+    <body onload="buildUI('<%= userId %>');">
         <%@ include file="./components/navigation.jsp" %>
 
         <div class="container">
-            <h1 id="page-title">Chart Page</h1>
 
-            <div id="chart"></div>
+            <h1 id="page-title" class="text-center">Review</h1>
+
+            <div class="columns col-gapless">
+
+                <div class="column col-11 col-mx-auto">
+                    <h2 class="text-center"> CO2 Footprint The Last Seven Days </h2>
+                    <div id="lastSevenDays"></div>
+                </div>
+
+                <div class="column col-11 col-mx-auto">
+                    <h2 class="text-center"> CO2 Breakdown by Meal Type </h2>
+                    <div id="breakdown"></div>
+                </div> 
+
+            </div>
         </div>
 
     </body>
 
 </html>
-
