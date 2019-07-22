@@ -19,6 +19,8 @@
     <body>
      <%@ include file="./components/navigation.jsp" %>
         <p>Log what you ate and then click submit!</p>
+        <p>Make sure that you <b>log in</b> before submitting this form!</p>
+        <p>Click <a href="http://su19-codeu-16-9291.appspot.com/food-list">here</a> to view the entire list of food in our database! </p>
 
         <form id="eatenFood" method="POST" enctype="multipart/form-data" action="<%= uploadUrl %>">
             <input name="form-id" id="form-id" type="hidden" value="eaten">
