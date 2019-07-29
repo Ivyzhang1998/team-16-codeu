@@ -1,41 +1,80 @@
 
-//Loads and initializes the Google Charts API, then calls drawChart()
-function initGoogleCharts() {
-    google.charts.load('current', {packages: ['corechart']});
-    google.charts.setOnLoadCallback(drawChart);
-}
+var userId;
 
-//Sets up chart data in a DataTable, draws a chart on the page
-function drawChart(){
-    fetch("/chartsdata/week")
+function drawLastSevenDaysChart(){
+    
+    const resourceLink = `/chartsdata?user=${userId}&analysisType=lastSevenDays`;
+
+    fetch(resourceLink, {
+        method: 'post'
+        })
         .then((response) => {
             return response.json();
         })
         .then((entries) => {
-            let chartData = new google.visualization.DataTable();
-            
-            //Columns for DataTable instance
-            chartData.addColumn("string", "Date");
-            chartData.addColumn("number", "Carbon Footprint");
+            var sevenDaysChartData = new google.visualization.DataTable();
 
-            let dates = Object.keys(entries);
-            for(let i = 0; i < dates.length; i++) {
-                let entryRow = [dates[i], entries[dates[i]]];
-                chartData.addRow(entryRow);
-            }
+            //Columns for DataTable instance
+            sevenDaysChartData.addColumn("string", "Date");
+            sevenDaysChartData.addColumn("number", "Carbon Footprint");
+
+            entries.forEach((entry) => {
+                let entryRow = [entry.date.slice(0, -18), entry.footprint];
+                sevenDaysChartData.addRow(entryRow);
+            });
 
             let options = {
-                "width" : 1200,
-                "height": 800
+                curveType: 'function',
+                legend: { position: 'bottom' }
             };
         
-            let chart = new google.visualization.LineChart(document.getElementById("chart"));
-            chart.draw(chartData, options);
+            let chart = new google.visualization.LineChart(document.getElementById("lastSevenDays"));
+            chart.draw(sevenDaysChartData, options);
         });
 }
 
-// Fetch data and populate the UI of the page.
-function buildUI() {
-    initGoogleCharts();
+function drawBreakdownChart() {
+    
+    const resourceLink = `/chartsdata?user=${userId}&analysisType=breakdown`;
+
+    fetch(resourceLink, {
+        method: 'post'
+        })
+        .then((response) => {
+            return response.json();
+        })
+        .then((entries) => {
+            var breakdownChartData = new google.visualization.DataTable();   
+            
+             // [ "Meal Type", "Total Footprint"]
+             // [ "Breakfast",  "2006607"]
+             // [ "Lunch",  "46576756567"]
+            breakdownChartData.addColumn("string", "Meal Type");
+            breakdownChartData.addColumn("number", "Total Carbon Footprint");
+
+            for(category in entries) {
+                let entryRow = [category, entries[category]];
+                breakdownChartData.addRow(entryRow);
+            }
+
+            let options = {
+                pieHole: 0.4,
+                legend: {
+                    alignment: 'center',
+                    position: 'top'
+                }
+            };
+        
+            let chart = new google.visualization.PieChart(document.getElementById("breakdown"));
+            chart.draw(breakdownChartData, options);
+        });
 }
 
+
+// Fetch data and populate the UI of the page.
+function buildUI(id) {
+    userId = id;
+    google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(drawLastSevenDaysChart);
+    google.charts.setOnLoadCallback(drawBreakdownChart);
+}

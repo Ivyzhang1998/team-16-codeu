@@ -26,6 +26,11 @@
     <body>
      <%@ include file="./components/navigation.jsp" %>
      <p>Log what you ate and then click submit!</p>
+     <p>Make sure that you <b>log in</b> before submitting this form!</p>
+     <p>
+         Click <a href="http://su19-codeu-16-9291.appspot.com/food-list">here</a> to view the entire list of food in our database!
+     </p>
+     <p>Log what you ate and then click submit!</p>
      <div class="control-group">
          <label for="select">Food</label>
          <select id="select" name="foodName" form="eatenFood">
@@ -57,7 +62,6 @@
          $('select').selectize({
              placeholder:'choose a food',
              create:false,
-
          });
      </script>
     </body>
