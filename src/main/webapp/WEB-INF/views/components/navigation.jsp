@@ -32,7 +32,6 @@
             <section class="navbar-section">
 
               <%
-              boolean isUserLoggedIn = (boolean) userService.isUserLoggedIn();
               if (isUserLoggedIn) {
                 String username = userService.getCurrentUser().getEmail();
               %>
