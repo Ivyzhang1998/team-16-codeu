@@ -12,6 +12,11 @@
               <a href="/community" class="btn btn-link">Community</a>
               <a href="/feed" class="btn btn-link">Public Feed</a>
               <a href="/stats" class="btn btn-link">Stats</a>
+
+              <%
+              boolean isUserLoggedIn = (boolean) userService.isUserLoggedIn();
+              if (isUserLoggedIn) {
+              %>
               <a href="/charts" class="btn btn-link">Charts</a>
               <div class="dropdown">
                 <a href="#" class="btn btn-link dropdown-toggle">Forms</a>
@@ -22,6 +27,8 @@
                   </li>
                 </ul>
               </div>
+              <% } %>
+
             </section>
 
 
