@@ -9,9 +9,6 @@
             <section class="navbar-section">
               <a href="/" class="navbar-brand mr-2"><strong>Carbon Mob</strong></a>
               <a href="/aboutus" class="btn btn-link">About</a>
-              <a href="/community" class="btn btn-link">Community</a>
-              <a href="/feed" class="btn btn-link">Public Feed</a>
-              <a href="/stats" class="btn btn-link">Stats</a>
 
               <%
               boolean isUserLoggedIn = (boolean) userService.isUserLoggedIn();
